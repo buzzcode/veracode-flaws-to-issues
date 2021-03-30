@@ -1,8 +1,8 @@
-name: 'Veracode Pipeline scan results to GitHub issues'
-description: 'Import the results of a Veracode Pipeline scan as Issues for a repo'
+name: 'Veracode scan results to GitHub issues'
+description: 'Import the results of a Veracode scan as Issues for a repo'
 inputs:
-  pipeline-results-json:
-    description: 'Pipeline scan results file'
+  scan-results-json:
+    description: 'Scan results file'
     required: true
     default: 'filtered_results.json'
   github-token:

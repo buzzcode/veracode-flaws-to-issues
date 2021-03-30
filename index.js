@@ -9,7 +9,7 @@ const importFlaws = require('./importer').importFlaws;
 
 try {
     // get input params
-    const resultsFile = core.getInput('pipeline-results-json', {required: true} );
+    const resultsFile = core.getInput('scan-results-json', {required: true} );
     const token = core.getInput('github-token', {required: true} );
     const waitTime = core.getInput('wait-time');                // default set in Action.yml
 

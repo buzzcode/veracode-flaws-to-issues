@@ -15,5 +15,6 @@ jobs:
       #uses: buzzcode/veracode-flaws-to-issues@v0.0.1
       uses: buzzcode/veracode-flaws-to-issues@main
       with:
-        pipeline-results-json: 'test/results_trimmed.json'
+        #pipeline-results-json: 'test/results_trimmed.json'
+        scan-results-json: 'test/policy_trimmed.json'
         github-token: ${{ secrets.GITHUB_TOKEN }}
