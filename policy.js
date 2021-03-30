@@ -78,7 +78,7 @@ async function getAllVeracodeIssues(options) {
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
-                        console.warn(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
+                        console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
@@ -128,7 +128,7 @@ async function processPolicyFlaws(options, flawData) {
 
         // check for duplicate
         if(issueExists(vid)) {
-            console.warn('Issue already exists, skipping import');
+            console.log('Issue already exists, skipping import');
             continue;
         }
 
