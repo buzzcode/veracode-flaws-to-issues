@@ -90,7 +90,7 @@ async function createLabels(options) {
         .catch( error => {
             // 422 (Unprocessable Entity) = label exists
             if(error.status == 422) {
-                console.warn(`VeracodeFlaw label \"${element.name}\" probably exists, (Error: ${error.message})`);
+                console.warn(`VeracodeFlaw label \"${element.name}\" probably exists, (Ignored error: ${error.message})`);
             } else {
                 throw new Error (`Error ${error.status} creating VeracodeFlaw label \"${element.name}\": ${error.message}`);
             }           
