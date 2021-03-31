@@ -1,18 +1,24 @@
-# Import Veracode Static Analysis Pipeline Scan to GitHub Issues - GitHub Action
+# Import Veracode Static Analysis Flaws to GitHub Issues - GitHub Action
 
-This action can be used in a workflow after a Veracode Static Analysis Pipeline Scan to take the results of the scan and import them into GitHub as Issues.
+This action can be used in a workflow after a Veracode Static Analysis (either Pipeline Scan or Policy/Sandbox scan) to take the results of the scan and import them into GitHub as Issues.
 
-Typically this is done with the filtered results of the Pipeline Scan, see [Pipeline Scan commands](https://help.veracode.com/r/r_pipeline_scan_commands) .
+## Importing Pipeline Scan flaws
+For a Pipeline Scan, this is typically done with the filtered results of the Pipeline Scan, see [Pipeline Scan commands](https://help.veracode.com/r/r_pipeline_scan_commands).  
 
-Note that when Issues are added, a tag is inserted into the Issue title.  The tag is of the form `[VID:<cwe>:<file>:<line>]`.  This tag is used to prevent duplicate issues from getting created.  There is some very simple matching of same file, same CWE, +/- 10 lines that will get resolved as the same issue.
+Note that when Issues are added, a tag is inserted into the Issue title.  The tag is of the form `[VID:<cwe>:<file>:<line>]`.  There is some very simple matching of same file, same CWE, +/- 10 lines that will get resolved as the same issue.
+
+## Importing Policy/Sandbox Scan flaws
+For a Policy or Sandbox scan, this is done with the Findings REST API call, see [Findings REST API](https://help.veracode.com/r/c_findings_v2_intro).
+
+Note that when Issues are added, a tag is inserted into the Issue title.  The tag is of the form `[VID:<flaw_number>]`.  This tag is used to prevent duplicate issues from getting created.  
 
 ---
 
 ## Inputs
 
-### `pipeline-results-json`
+### `scan-results-json`
 
-**Required** The path to the pipeline results file in JSON format (typically the filtered results).
+**Required** The path to the scan results file in JSON format.  The scan type, Pipeline or Policy/Sandbox, is auto-detected based on the input file and imported issues are labeled appropriately.
 |Default value |  `"filtered_results.json"`|
 --- | ---
 
@@ -28,10 +34,12 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 
 ## Example usage
 
+### Pipeline Scan
+
 ```yaml
   . . . 
 # This first step is assumed to exist already in your Workflow
-scan:
+  scan:
     runs-on: ubuntu-latest
     container: 
       image: veracode/pipeline-scan:latest
@@ -69,9 +77,65 @@ scan:
           name: filtered-results
 
       - name: import flaws as issues
-        uses: buzzcode/pipeline-to-issues@main
-        # uses: buzzcode/pipeline-to-issues@v1
+        uses: buzzcode/veracode-flaws-to-issues@main
+        # uses: buzzcode/veracode-flaws-to-issues@v1
         with:
-          pipeline-results-json: 'filtered_results.json'
+          scan-results-json: 'filtered_results.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
- ```
+```
+
+### Policy/Sandbox scan
+
+```yaml
+# this first step will get existing flaws for an Application Profile (in this case, NodeGoat).  
+# 	(obviously) Change the name=<app_name> in the first http call to be 
+#	the name of your Application on the Veracode platform
+  get-policy-flaws:
+    runs-on: ubuntu-latest
+    container: 
+      image: veracode/api-signing:latest
+      #options: --user root
+    steps:
+      # Note: this will likely fail if there are more than 500 flaws, due to Veracode results limiting
+      #   (would need a more elaborate method)
+      - name: get policy flaws
+        run: |
+          cd /tmp
+          export VERACODE_API_KEY_ID=${{ secrets.VERACODE_API_ID }}
+          export VERACODE_API_KEY_SECRET=${{ secrets.VERACODE_API_KEY }}
+          guid=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v1/applications?name=NodeGoat" | jq -r '._embedded.applications[0].guid') 
+          echo GUID: ${guid}
+          total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
+          echo TOTAL_FLAWS: ${total_flaws}
+          http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
+          ls -l
+
+      - name: save results file
+        uses: actions/upload-artifact@v2
+        with:
+          name: policy-flaws
+          path: /tmp/policy_flaws.json
+
+  import-policy-flaws:
+    needs: get-policy-flaws
+    runs-on: ubuntu-latest
+    steps:
+      - name: get flaw file
+        uses: actions/download-artifact@v2
+        with:
+          name: policy-flaws
+          path: /tmp
+
+      - name: debug1
+        run: |
+          pwd
+          ls -l
+          ls -l /tmp
+
+      - name: import flaws as issues
+        uses: buzzcode/veracode-flaws-to-issues@main
+        with:
+          scan-results-json: '/tmp/policy_flaws.json'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+```
