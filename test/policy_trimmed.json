@@ -15,7 +15,7 @@
           "resolution": "UNRESOLVED",
           "mitigation_review_status": "NONE",
           "new": false,
-          "resolution_status": "NONE",
+          "resolution_status": "APPROVED",
           "last_seen_date": "2020-10-01T19:33:23.620Z"
         },
         "finding_details": {

@@ -126,6 +126,12 @@ async function processPolicyFlaws(options, flawData) {
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
+        // check for mitigation
+        if(flaw.finding_status.resolution_status == 'APPROVED') {
+            console.log('Flaw mitigated, skipping import');
+            continue;
+        }
+
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
