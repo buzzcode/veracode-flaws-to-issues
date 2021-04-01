@@ -65,7 +65,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
         with:
           name: filtered-results
           path: filtered_results.json
-  	
+
 # This step will import the flaws from the previous step above
   import-issues:
     needs: scan
@@ -89,7 +89,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 ```yaml
 # this first step will get existing flaws for an Application Profile (in this case, NodeGoat).  
 # 	(obviously) Change the name=<app_name> in the first http call to be 
-#	the name of your Application on the Veracode platform
+#	  the name of your Application on the Veracode platform
   get-policy-flaws:
     runs-on: ubuntu-latest
     container: 
@@ -108,7 +108,6 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           total_flaws=$(http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True" | jq -r '.page.total_elements')
           echo TOTAL_FLAWS: ${total_flaws}
           http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
-          ls -l
 
       - name: save results file
         uses: actions/upload-artifact@v2
@@ -126,16 +125,9 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           name: policy-flaws
           path: /tmp
 
-      - name: debug1
-        run: |
-          pwd
-          ls -l
-          ls -l /tmp
-
       - name: import flaws as issues
         uses: buzzcode/veracode-flaws-to-issues@main
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
 ```
