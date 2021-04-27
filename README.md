@@ -66,7 +66,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           name: filtered-results
           path: filtered_results.json
 
-# This step will import the flaws from the previous step above
+# This step will import the flaws from the step above
   import-issues:
     needs: scan
     runs-on: ubuntu-latest
@@ -77,8 +77,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           name: filtered-results
 
       - name: import flaws as issues
-        uses: buzzcode/veracode-flaws-to-issues@main
-        # uses: buzzcode/veracode-flaws-to-issues@v1
+        uses: buzzcode/veracode-flaws-to-issues@v1
         with:
           scan-results-json: 'filtered_results.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -87,14 +86,14 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 ### Policy/Sandbox scan
 
 ```yaml
+  . . .
 # this first step will get existing flaws for an Application Profile (in this case, NodeGoat).  
 # 	(obviously) Change the name=<app_name> in the first http call to be 
-#	  the name of your Application on the Veracode platform
+#	the name of your Application on the Veracode platform
   get-policy-flaws:
     runs-on: ubuntu-latest
     container: 
       image: veracode/api-signing:latest
-      #options: --user root
     steps:
       # Note: this will likely fail if there are more than 500 flaws, due to Veracode results limiting
       #   (would need a more elaborate method)
@@ -115,6 +114,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           name: policy-flaws
           path: /tmp/policy_flaws.json
 
+# This step will import flaws from the step above
   import-policy-flaws:
     needs: get-policy-flaws
     runs-on: ubuntu-latest
@@ -126,7 +126,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
           path: /tmp
 
       - name: import flaws as issues
-        uses: buzzcode/veracode-flaws-to-issues@main
+        uses: buzzcode/veracode-flaws-to-issues@v1
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
