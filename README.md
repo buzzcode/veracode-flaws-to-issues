@@ -95,8 +95,10 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
     container: 
       image: veracode/api-signing:latest
     steps:
-      # Note: this will likely fail if there are more than 500 flaws, due to Veracode results limiting
-      #   (would need a more elaborate method)
+      # Note: this will only work up to about 500 flaws
+      #		due to Veracode results limiting
+      # See the script get_flaws.sh script in the helpers directory
+      #		for a more elaborate method
       - name: get policy flaws
         run: |
           cd /tmp

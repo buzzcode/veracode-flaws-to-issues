@@ -2,3 +2,6 @@
 
 #local settings for testing
 .env
+
+# helper test output
+helpers/flaws*
