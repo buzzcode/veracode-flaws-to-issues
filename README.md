@@ -97,7 +97,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
     steps:
       # Note: this will only work up to about 500 flaws
       #		due to Veracode results limiting
-      # See the script get_flaws.sh script in the helpers directory
+      # See the get_flaws.sh script in the helpers directory
       #		for a more elaborate method
       - name: get policy flaws
         run: |
