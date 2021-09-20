@@ -31,7 +31,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 ### `commit-hash`  
 **Required** `${{ GITHUB.SHA }`, to linke the issue to the correct file on the commit where it was found.  
 --- | ---  
-
+  
 ### `source_base_path_1` - `source_base_path_3`   
 **Optional** This will rewrite the path seen on the scan to the real source path. This way the code can be shown and linked on the issue. It's a simple search and replace `path-in-build-artifact : path-in-source-repo`. This suports up to 3 rewrites.  
 EXAMPLE:  
