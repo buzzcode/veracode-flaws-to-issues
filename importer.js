@@ -17,6 +17,10 @@ async function importFlaws(options) {
     const githubRepo = options.githubRepo;
     const githubToken = options.githubToken;
     const waitTime = parseInt(options.waitTime);
+    const source_base_path_1 = options.source_base_path_1; 
+    const source_base_path_2 = options.source_base_path_2; 
+    const source_base_path_3 = options.source_base_path_3;
+    const commit_hash = options.commit_hash;
     var flawData;
 
     // basic sanity checking
