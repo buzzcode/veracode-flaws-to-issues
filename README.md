@@ -35,8 +35,8 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 ### `source_base_path_1` - `source_base_path_3`   
 **Optional** This will rewrite the path seen on the scan to the real source path. This way the code can be shown and linked on the issue. It's a simple search and replace `path-in-build-artifact : path-in-source-repo`. This suports up to 3 rewrites.  
 EXAMPLE:  
-`source_base_path_1: "com/veracode:src/main/java/com/veracode"`  
-`source_base_path_2: "WEB-INF:src/main/webapp/WEB-INF"`  
+`source-base-path_1: "com/veracode:src/main/java/com/veracode"`  
+`source-base-path_2: "WEB-INF:src/main/webapp/WEB-INF"`  
 --- | ---            
 
 ### `wait-time`

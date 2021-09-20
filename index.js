@@ -12,9 +12,9 @@ try {
     const resultsFile = core.getInput('scan-results-json', {required: true} );
     const token = core.getInput('github-token', {required: true} );
     const waitTime = core.getInput('wait-time');                // default set in Action.yml
-    const source_base_path_1 = core.getInput('source_base_path_1'); 
-    const source_base_path_2 = core.getInput('source_base_path_2'); 
-    const source_base_path_3 = core.getInput('source_base_path_3');
+    const source_base_path_1 = core.getInput('source-base-path_1'); 
+    const source_base_path_2 = core.getInput('source-base-path_2'); 
+    const source_base_path_3 = core.getInput('source-base-path_3');
     const commit_hash = core.getInput('commit-hash');
 
     // other params
