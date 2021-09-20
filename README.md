@@ -30,7 +30,7 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 
 **Optional** GitHub (at least the free/public version) has a rate limiter to prevent a user from adding Issues too quickly.  This value is used to insert a small delay between each new issue created so as to not trip the rate limiter.  This value sets the number of seconds between each issue.  See [here](https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-rate-limits) for additional information.
 | Default value | `"2"` |
---- | ---
+--- | ---  
 
 ## Example usage
 
