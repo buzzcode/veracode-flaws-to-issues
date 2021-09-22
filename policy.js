@@ -138,12 +138,57 @@ async function processPolicyFlaws(options, flawData) {
             continue;
         }
 
+        //rewrite path
+        function replacePath (rewrite, path){
+            replaceValues = rewrite.split(":")
+            //console.log('Value 1:'+replaceValues[0]+' Value 2: '+replaceValues[1]+' old path: '+path)
+            newPath = path.replace(replaceValues[0],replaceValues[1])
+            //console.log('new Path:'+newPath)
+            return newPath
+        }
+
+        filename = flaw.finding_details.file_path
+
+        if (options.source_base_path_1 || options.source_base_path_2 || options.source_base_path_3){
+            orgPath1 = options.source_base_path_1.split(":")
+            orgPath2 = options.source_base_path_2.split(":")
+            orgPath3 = options.source_base_path_3.split(":")
+            //console.log('path1: '+orgPath1[0]+' path2: '+orgPath2[0]+' path3: '+orgPath3[0])
+
+            if( filename.includes(orgPath1[0])) {
+                //console.log('file path1: '+filename)
+                filepath = replacePath(options.source_base_path_1, filename)
+            }
+            else if (filename.includes(orgPath2[0])){
+                //console.log('file path2: '+filename)
+                filepath = replacePath(options.source_base_path_2, filename)
+            }
+            else if (filename.includes(orgPath3[0])){
+                //console.log('file path3: '+filename)
+                filepath = replacePath(options.source_base_path_3, filename)
+            }
+            //console.log('Filepath:'+filepath);
+        }
+
+        linestart = eval(flaw.finding_details.file_line_number-5)
+        linened = eval(flaw.finding_details.file_line_number+5)
+
+        commit_path = "https://github.com/"+options.githubOwner+"/"+options.githubRepo+"/blob/"+options.commit_hash+"/"+filepath+"#L"+linestart+"-L"+linened
+
+        //console.log('Full Path:'+commit_path)
+
+
+
+
+
         // add to repo's Issues
         // (in theory, we could do this w/o await-ing, but GitHub has rate throttling, so single-threading this helps)
         let title = `${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}') ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
-        let bodyText = `**Filename:** ${flaw.finding_details.file_name}`;
+        //let bodyText = `**Filename:** ${flaw.finding_details.file_name}`;
+        let bodyText = `${commit_path}`;
+        bodyText += `\n\n**Filename:** ${flaw.finding_details.file_name}`;
         bodyText += `\n\n**Line:** ${flaw.finding_details.file_line_number}`;
         bodyText += `\n\n**CWE:** ${flaw.finding_details.cwe.id} (${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}'))`;
         bodyText += '\n\n' + decodeURI(flaw.description);

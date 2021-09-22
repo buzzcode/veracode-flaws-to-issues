@@ -20,11 +20,24 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 
 **Required** The path to the scan results file in JSON format.  The scan type, Pipeline or Policy/Sandbox, is auto-detected based on the input file and imported issues are labeled appropriately.
 |Default value |  `"filtered_results.json"`|
---- | ---
+--- | ---  
 
 ### `github-token`
 
-**Required** GitHub token needed to access the repo.  Normally, when run in a Workflow, use the `{{ secrets.GITHUB-TOKEN }}` that is created by GitHub.  See [here](https://docs.github.com/en/actions/reference/authentication-in-a-workflow) for further information.
+**Required** GitHub token needed to access the repo.  Normally, when run in a Workflow, use the `{{ secrets.GITHUB-TOKEN }}` that is created by GitHub.  See [here](https://docs.github.com/en/actions/reference/authentication-in-a-workflow) for further information.  
+--- | ---  
+
+
+### `commit-hash`  
+**Required** `${{ GITHUB.SHA }`, to linke the issue to the correct file on the commit where it was found.  
+--- | ---  
+  
+### `source_base_path_1` - `source_base_path_3`   
+**Optional** This will rewrite the path seen on the scan to the real source path. This way the code can be shown and linked on the issue. It's a simple search and replace `path-in-build-artifact : path-in-source-repo`. This suports up to 3 rewrites.  
+EXAMPLE:  
+`source-base-path_1: "com/veracode:src/main/java/com/veracode"`  
+`source-base-path_2: "WEB-INF:src/main/webapp/WEB-INF"`  
+--- | ---            
 
 ### `wait-time`
 
@@ -81,6 +94,9 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
         with:
           scan-results-json: 'filtered_results.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          source_base_path_1: "com/veracode:src/main/java/com/veracode"  
+          source_base_path_2: "WEB-INF:src/main/webapp/WEB-INF"  
+          commit-hash: ${{ GITHUB.SHA }}  
 ```
 
 ### Policy/Sandbox scan
@@ -131,5 +147,8 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
         uses: buzzcode/veracode-flaws-to-issues@v1
         with:
           scan-results-json: '/tmp/policy_flaws.json'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}  
+          source_base_path_1: "com/veracode:src/main/java/com/veracode" 
+          source_base_path_2: "WEB-INF:src/main/webapp/WEB-INF"  
+          commit-hash: ${{ GITHUB.SHA }}  
 ```

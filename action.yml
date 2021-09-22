@@ -12,6 +12,18 @@ inputs:
     description: 'Delay (in seconds) between entering Issues into GitHub (due to rate limiting)'
     required: false
     default: '2'
+  source_base_path_1:
+    description: 'Rewrite 1'
+    required: false
+  source_base_path_2:
+    description: 'Rewrite 2'
+    required: false
+  source_base_path_3:
+    description: 'Rewrite 3'
+    required: false
+  commit-hash:
+    description: 'Commit Hash'
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
