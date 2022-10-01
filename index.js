@@ -15,7 +15,7 @@ try {
     const source_base_path_1 = core.getInput('source-base-path_1'); 
     const source_base_path_2 = core.getInput('source-base-path_2'); 
     const source_base_path_3 = core.getInput('source-base-path_3');
-    const commit_hash = core.getInput('commit-hash');
+    const commit_hash = process.env.GITHUB_SHA;
     console.log('resultsFiel: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash)
 
     // other params

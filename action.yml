@@ -22,10 +22,7 @@ inputs:
   source_base_path_3:
     description: 'Rewrite 3'
     required: false
-  commit-hash:
-    description: 'Commit Hash'
-    required: true
-    default: ${{ github_sha }}
+
 runs:
   using: 'node12'
   main: 'index.js'
