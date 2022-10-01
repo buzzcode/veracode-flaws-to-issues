@@ -195,6 +195,8 @@ async function processPolicyFlaws(options, flawData) {
             let pr_link = `Veracode issue link to PR: https://github.com/repos/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentId
         }
 
+        console.log('pr_link: '+pr_link)
+
 
         let bodyText = `${commit_path}`;
         bodyText += `\n\n**Filename:** ${flaw.finding_details.file_name}`;
@@ -212,7 +214,7 @@ async function processPolicyFlaws(options, flawData) {
             'pr_link': pr_link
         };
 
-        console.log('Issue: '+issue)
+        console.log('Issue: '+JSON.stringify(issue))
         
         await addVeracodeIssue(options, issue)
         .catch( error => {
