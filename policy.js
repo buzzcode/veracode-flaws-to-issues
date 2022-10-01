@@ -211,6 +211,8 @@ async function processPolicyFlaws(options, flawData) {
             'body': bodyText,
             'pr_link': pr_link
         };
+
+        console.log('Issue: '+issue)
         
         await addVeracodeIssue(options, issue)
         .catch( error => {

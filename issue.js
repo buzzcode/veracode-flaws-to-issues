@@ -36,6 +36,7 @@ async function addVeracodeIssue(options, issue) {
         var issue_number = result.data.number
         if ( issue.pr_link != "" ){
             console.log('Running on a PR, adding PR to the issue.')
+            console.log('pr_link: '+issue.pr_link+'\nissue_number: '+issue_number)
         
             await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
                 headers: {
