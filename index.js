@@ -27,7 +27,8 @@ try {
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
-    let isPR = pullRequest?.indexOf("pull")
+    console.log('pull request: '+pullRequest)
+    let isPR = pullRequest.indexOf("pull")
 
     console.log('Is PR: '+isPR)
 
