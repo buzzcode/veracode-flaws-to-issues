@@ -25,7 +25,7 @@ inputs:
   commit-hash:
     description: 'Commit Hash'
     required: true
-    default: ${{ github.github_sha }}
+    default: ${{ github_sha }}
 runs:
   using: 'node12'
   main: 'index.js'
