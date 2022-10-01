@@ -129,11 +129,11 @@ async function processPolicyFlaws(options, flawData) {
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
 
-        var issue_number = exisingFlawNumber[vid]
-        console.log('isseue_number1: '+issue_number)
-
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
+
+        var issue_number = exisingFlawNumber[vid]
+        console.log('isseue_number1: '+issue_number)
 
         // check for mitigation
         if(flaw.finding_status.resolution_status == 'APPROVED') {
