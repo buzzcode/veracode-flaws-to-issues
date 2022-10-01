@@ -34,9 +34,10 @@ async function addVeracodeIssue(options, issue) {
     .then( result => {
         console.log(`Issue successfully created, result: ${result.status}`);
         console.log('result: '+JSON.stringify(result))
+        var issue_number = result.data.number
         if ( issue.pr_link != "" ){
             console.log('Running on a PR, adding PR to the issue.')
-            /*
+        
             await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
                 headers: {
                     authorization: authToken
@@ -48,7 +49,7 @@ async function addVeracodeIssue(options, issue) {
                     "body": issue.pr_link
                 }
             }
-            */
+
         }
     })
     .catch( error => {
