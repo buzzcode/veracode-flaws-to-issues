@@ -4,7 +4,7 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
-//const process = require('@process');
+const { constants } = require('fs/promises');
 
 const importFlaws = require('./importer').importFlaws;
 
@@ -21,9 +21,6 @@ try {
     // other params
     const owner = github.context.repo.owner;
     const repo = github.context.repo.repo;
-    // context {{ github.repository }}  = 'owner/reponame'
-
-    //console.log(`Calling with: resultsFile: ${resultsFile}, token: ${token}, waitTime: ${waitTime}, owner: ${owner}, repo: ${repo}`)
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
@@ -35,12 +32,13 @@ try {
     if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
 
-        let pr_context = github.context
-        let pr_repository = process.env.GITHUB_REPOSITORY
-        let pr_repo = pr_repository.split("/");
-        let pr_commentID = pr_context.payload.pull_request.number
-        console.log('PR Context: '+pr_context+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+        const pr_context = github.context
+        const pr_repository = process.env.GITHUB_REPOSITORY
+        const pr_repo = pr_repository.split("/");
+        const pr_commentID = pr_context.payload.pull_request.number
     }
+    console.log('PR Context: '+pr_context+'\nPR Repository: '+pr_repository+'\nPR Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+
 
     // do the thing
     importFlaws(
@@ -53,10 +51,10 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
-         pr_context: pr_context,
-         pr_repository: pr_repository,
-         pr_repo: pr_repo,
-         pr_commentID: pr_commentID
+         prContext: pr_context,
+         prRepository: pr_repository,
+         prRepo: pr_repo,
+         prCommentID: pr_commentID
         }
     )
     .catch(error => {console.error(`Failure at ${error.stack}`)});
