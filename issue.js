@@ -47,8 +47,7 @@ async function addVeracodeIssue(options, issue) {
                 data: {
                     "body": issue.pr_link
                 }
-            }
-
+            })
         }
     })
     .catch( error => {
