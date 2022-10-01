@@ -29,14 +29,17 @@ try {
     console.log('Is PR: '+isPR)
 
     var pr_context
-    var pr_repository
-    var pr_repo
     var pr_commentID
 
    if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
+        pr_context = github.context
+        pr_commentID = pr_context.payload.pull_request.number
    }
+
     
+
+
     // do the thing
     importFlaws(
         {resultsFile: resultsFile,
@@ -48,7 +51,8 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
-         isPR: isPR
+         isPR: isPR,
+         pr_commentID: pr_commentID
         }
     )
     .catch(error => {console.error(`Failure at ${error.stack}`)});
