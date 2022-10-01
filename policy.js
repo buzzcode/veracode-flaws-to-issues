@@ -9,6 +9,7 @@ const addVeracodeIssueComment = require('./issue').addVeracodeIssue;
 
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
+var existingFlawNumber = [];
 
 
 
@@ -72,7 +73,7 @@ async function getAllVeracodeIssues(options) {
             })
             .then( result => {
                 console.log(`${result.data.length} flaw(s) found, (result code: ${result.status})`);
-                console.log('Old GH issue: '+JSON.stringify(result.data))
+                //console.log('Old GH issue: '+JSON.stringify(result.data))
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
@@ -84,6 +85,7 @@ async function getAllVeracodeIssues(options) {
                     } else {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
+                        exisingFlawNumber[parseInt(flawNum)] = result.data.number;
                     }
                 })
 
@@ -127,7 +129,7 @@ async function processPolicyFlaws(options, flawData) {
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
 
-        var issue_number = NEED_TO_FIND_ISSUE_NUMBER
+        var issue_number = exisingFlawNumber[vid]
         console.log('isseue_number1: '+issue_number)
 
         let vid = createVeracodeFlawID(flaw);
