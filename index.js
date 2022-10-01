@@ -53,7 +53,6 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
-         pr_context: pr_context,
          pr_repository: pr_repository,
          pr_repo: pr_repo,
          pr_commentID: pr_commentID
