@@ -10,6 +10,7 @@ const addVeracodeIssueComment = require('./issue').addVeracodeIssue;
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
 var existingFlawNumber = [];
+var pr_link
 
 
 
@@ -112,7 +113,7 @@ function issueExists(vid) {
         return false;
 }
 
-var pr_link
+
 
 async function processPolicyFlaws(options, flawData) {
 
@@ -132,7 +133,7 @@ async function processPolicyFlaws(options, flawData) {
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
-        var issue_number = exisingFlawNumber[vid]
+        var issue_number = exisingFlawNumber[parseVeracodeFlawID(vid).flawNum]
         console.log('isseue_number1: '+issue_number)
 
         // check for mitigation
