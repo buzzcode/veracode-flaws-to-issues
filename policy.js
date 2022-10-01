@@ -194,7 +194,7 @@ async function processPolicyFlaws(options, flawData) {
         console.log('prCommentID: '+options.isPR)
 
         if ( options.isPR >= 1 ){
-            let pr_link = `Veracode issue link to PR: https://github.com/repos/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentId
+            pr_link = `Veracode issue link to PR: https://github.com/repos/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentId
         }
 
         console.log('pr_link: '+pr_link)
