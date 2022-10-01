@@ -28,15 +28,21 @@ try {
 
     console.log('Is PR: '+isPR)
 
+    var pr_context
+    var pr_repository
+    var pr_repo
+    var pr_commentID
+
    if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
+        const pr_context = github.context
+        const pr_repository = process.env.GITHUB_REPOSITORY
+        const pr_repo = pr_repository.split("/");
+        const pr_commentID = pr_context.payload.pull_request.number
+        console.log('PR Context: '+pr_context+'\nPR Repository: '+pr_repository+'\nPR Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
    }
 
-    const pr_context = github.context
-    const pr_repository = process.env.GITHUB_REPOSITORY
-    const pr_repo = pr_repository.split("/");
-    const pr_commentID = pr_context.payload.pull_request.number
-    console.log('PR Context: '+pr_context+'\nPR Repository: '+pr_repository+'\nPR Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+    
 
 
     // do the thing
