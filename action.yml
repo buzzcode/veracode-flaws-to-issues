@@ -7,6 +7,7 @@ inputs:
     default: 'filtered_results.json'
   github-token:
     description: 'GitHub token to access the repo'
+    default: ${{ github.token }}
     required: true
   wait-time:
     description: 'Delay (in seconds) between entering Issues into GitHub (due to rate limiting)'
@@ -23,7 +24,8 @@ inputs:
     required: false
   commit-hash:
     description: 'Commit Hash'
-    required: false
+    required: true
+    default: ${{ github.github_sha }}
 runs:
   using: 'node12'
   main: 'index.js'
