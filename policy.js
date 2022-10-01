@@ -108,6 +108,8 @@ function issueExists(vid) {
         return false;
 }
 
+var pr_link
+
 async function processPolicyFlaws(options, flawData) {
 
     const util = require('./util');
@@ -135,6 +137,11 @@ async function processPolicyFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
+            if ( options.isPR >= 1 ){
+                console.log('We are on a PR, need to link this issue to this PR')
+                pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+            }
+    
             continue;
         }
 
@@ -188,8 +195,6 @@ async function processPolicyFlaws(options, flawData) {
         let title = `${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}') ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
-        
-        var pr_link
 
         console.log('prCommentID: '+options.isPR)
 
