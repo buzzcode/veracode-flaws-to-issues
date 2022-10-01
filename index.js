@@ -4,7 +4,7 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
-const process = require('@process');
+//const process = require('@process');
 
 const importFlaws = require('./importer').importFlaws;
 
