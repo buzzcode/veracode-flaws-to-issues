@@ -169,6 +169,9 @@ async function processPolicyFlaws(options, flawData) {
                 //console.log('file path3: '+filename)
                 let filepath = replacePath(options.source_base_path_3, filename)
             }
+            else {
+                let filepath = filename
+            }
             console.log('Filepath:'+filepath);
         }
 
