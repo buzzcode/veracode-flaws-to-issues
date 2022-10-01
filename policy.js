@@ -149,7 +149,7 @@ async function processPolicyFlaws(options, flawData) {
 
         filename = flaw.finding_details.file_path
 
-        var filepath
+        var filepath = filename
 
         if (options.source_base_path_1 || options.source_base_path_2 || options.source_base_path_3){
             orgPath1 = options.source_base_path_1.split(":")
@@ -168,9 +168,6 @@ async function processPolicyFlaws(options, flawData) {
             else if (filename.includes(orgPath3[0])){
                 //console.log('file path3: '+filename)
                 let filepath = replacePath(options.source_base_path_3, filename)
-            }
-            else {
-                let filepath = filename
             }
             console.log('Filepath:'+filepath);
         }
