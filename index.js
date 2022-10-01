@@ -35,11 +35,11 @@ try {
     if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
 
-        const pr_context = github.context
-        const pr_repository = process.env.GITHUB_REPOSITORY
-        const pr_repo = pr_repository.split("/");
-        const pr_commentID = pr_context.payload.pull_request.number
-        console.log('PR Context: '+JSON.stringify(pr_context)+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+        let pr_context = github.context
+        let pr_repository = process.env.GITHUB_REPOSITORY
+        let pr_repo = pr_repository.split("/");
+        let pr_commentID = pr_context.payload.pull_request.number
+        console.log('PR Context: '+pr_context+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
     }
 
     // do the thing
@@ -53,6 +53,7 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
+         pr_context: pr_context,
          pr_repository: pr_repository,
          pr_repo: pr_repo,
          pr_commentID: pr_commentID
