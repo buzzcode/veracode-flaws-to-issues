@@ -223,7 +223,7 @@ async function processPolicyFlaws(options, flawData) {
 
         console.log('Issue: '+JSON.stringify(issue))
         
-        await addVeracodeIssue(options, issue)
+        var issue_numnber = await addVeracodeIssue(options, issue)
         .catch( error => {
             if(error instanceof util.ApiError) {
 
@@ -246,6 +246,8 @@ async function processPolicyFlaws(options, flawData) {
                 throw error; 
             }
         })
+
+        console.log('My Issue Nmbuer: '+issue_numnber)
 
         // progress counter for large flaw counts
         if( (index > 0) && (index % 25 == 0) )

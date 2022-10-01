@@ -50,6 +50,47 @@ async function addVeracodeIssue(options, issue) {
                 }
             })
         }
+        return issue_number
+    })
+    .catch( error => {
+        // 403 possible rate-limit error
+        if((error.status == 403) && (error.message.indexOf('abuse detection') > 0) ) {
+
+            console.warn(`GitHub rate limiter tripped, ${error.message}`);
+
+            throw new ApiError('Rate Limiter tripped');
+        } else {
+            throw new Error (`Error ${error.status} creating Issue for \"${issue.title}\": ${error.message}`);
+        }           
+    });
+}
+
+async function addVeracodeIssueComment(options, issue) {
+
+    const label = require('./label');
+    const ApiError = require('./util').ApiError;
+
+    const githubOwner = options.githubOwner;
+    const githubRepo = options.githubRepo;
+    const githubToken = options.githubToken;
+
+    console.debug(`Adding Issue for ${issue.title}`);
+
+    var authToken = 'token ' + githubToken;
+
+    console.log('Running on a PR, adding PR to the issue.')
+    console.log('pr_link: '+issue.pr_link+'\nissue_number: '+issue_number)
+        
+    await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+        headers: {
+            authorization: authToken
+        },
+        owner: githubOwner,
+        repo: githubRepo,
+        issue_number: issue_number,
+        data: {
+            "body": issue.pr_link
+        }
     })
     .catch( error => {
         // 403 possible rate-limit error
@@ -65,3 +106,4 @@ async function addVeracodeIssue(options, issue) {
 }
 
 module.exports = { addVeracodeIssue };
+module.exports = { addVeracodeIssueComment };
