@@ -125,7 +125,8 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-        var issue_numnber = flawData._embedded.data.number
+        var issue_number = flawData._embedded.data.number
+        console.log('isseue_number1: '+issue_number)
         //console.log('Old flaw: '+JSON.stringify(flawData._embedded))
 
         let vid = createVeracodeFlawID(flaw);
@@ -143,23 +144,27 @@ async function processPolicyFlaws(options, flawData) {
             if ( options.isPR >= 1 ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+                
+                console.log('isseue_number2: '+issue_number)
+
+                let issueComment = {
+                    'issue_number': issue_number,
+                    'pr_link': pr_link
+                }; 
+    
+    
+                await addVeracodeIssueComment(options, issueComment)
+                .catch( error => {
+                    if(error instanceof util.ApiError) {
+                        throw error;
+                    } else {
+                        //console.error(error.message);
+                        throw error; 
+                    }
+                })
             }
 
-            let issueComment = {
-                'issue_number': issue_numnber,
-                'pr_link': pr_link
-            }; 
 
-
-            await addVeracodeIssueComment(options, issueComment)
-            .catch( error => {
-                if(error instanceof util.ApiError) {
-                    throw error;
-                } else {
-                    //console.error(error.message);
-                    throw error; 
-                }
-            })
     
             continue;
         }
