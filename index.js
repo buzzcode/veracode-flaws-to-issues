@@ -4,7 +4,6 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { constants } = require('fs/promises');
 
 const importFlaws = require('./importer').importFlaws;
 
