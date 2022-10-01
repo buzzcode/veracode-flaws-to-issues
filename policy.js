@@ -125,7 +125,8 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-        console.log('Old flaw: '+JSON.stringify(flawData._embedded))
+        var issue_numnber = flawData._embedded.data.number
+        //console.log('Old flaw: '+JSON.stringify(flawData._embedded))
 
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
@@ -145,7 +146,7 @@ async function processPolicyFlaws(options, flawData) {
             }
 
             let issueComment = {
-                'issue_number': flawData._embedded.data.number,
+                'issue_number': issue_numnber,
                 'pr_link': pr_link
             }; 
 
