@@ -33,6 +33,23 @@ async function addVeracodeIssue(options, issue) {
     })
     .then( result => {
         console.log(`Issue successfully created, result: ${result.status}`);
+        console.log('result: '+JSON.stringify(result))
+        if ( issue.pr_link != "" ){
+            console.log('Running on a PR, adding PR to the issue.')
+            /*
+            await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+                headers: {
+                    authorization: authToken
+                },
+                owner: githubOwner,
+                repo: githubRepo,
+                issue_number: issue_number,
+                data: {
+                    "body": issue.pr_link
+                }
+            }
+            */
+        }
     })
     .catch( error => {
         // 403 possible rate-limit error

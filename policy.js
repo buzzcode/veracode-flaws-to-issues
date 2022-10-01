@@ -189,9 +189,10 @@ async function processPolicyFlaws(options, flawData) {
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
         
+        var pr_link
+
         if ( options.pr_commentId ){
-            let pr = `url: https://github.com/`+options.githubOwner+`/`+options.githubRepo
-            //https://api.github.com/repos/octocat/Hello-World/pulls/1347
+            let pr_link = `Veracode issue link to PR: https://github.com/repos/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentId
         }
 
 
@@ -207,7 +208,8 @@ async function processPolicyFlaws(options, flawData) {
             'title': title,
             'label': lableBase,
             'severity': severity,
-            'body': bodyText
+            'body': bodyText,
+            'pr_link': pr_link
         };
         
         await addVeracodeIssue(options, issue)
