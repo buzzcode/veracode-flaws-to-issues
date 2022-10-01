@@ -173,7 +173,7 @@ async function processPolicyFlaws(options, flawData) {
         linestart = eval(flaw.finding_details.file_line_number-5)
         linened = eval(flaw.finding_details.file_line_number+5)
 
-        commit_path = "https://github.com/"+options.githubOwner+"/"+options.githubRepo+"/blob/"+options.commit_hash+"/"+filepath+"#L"+linestart+"-L"+linened
+        let commit_path = "https://github.com/"+options.githubOwner+"/"+options.githubRepo+"/blob/"+options.commit_hash+"/"+filepath+"#L"+linestart+"-L"+linened
 
         //console.log('Full Path:'+commit_path)
 
@@ -237,3 +237,4 @@ async function processPolicyFlaws(options, flawData) {
 }
 
 module.exports = { processPolicyFlaws }
+

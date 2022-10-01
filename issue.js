@@ -18,6 +18,11 @@ async function addVeracodeIssue(options, issue) {
 
     var authToken = 'token ' + githubToken;
 
+    if ( options.pr_commentID ){
+        pr_link = "\"pull_request\"\: \[\"url: https://api.github.com/repos/octocat/Hello-World/pulls/1347\", \"html_url: https://github.com/octocat/Hello-World/pull/1347\", \"diff_url; https://github.com/octocat/Hello-World/pull/1347.diff\",\"patch_url: https://github.com/octocat/Hello-World/pull/1347.patch\"\],"
+    }
+
+
     await request('POST /repos/{owner}/{repo}/issues', {
         headers: {
             authorization: authToken
@@ -27,6 +32,7 @@ async function addVeracodeIssue(options, issue) {
         data: {
             "title": issue.title,
             "labels": [label.severityToLabel(issue.severity), issue.label],
+            pr_link
             "body": issue.body
         }
     })
