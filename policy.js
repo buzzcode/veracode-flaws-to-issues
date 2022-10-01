@@ -72,6 +72,7 @@ async function getAllVeracodeIssues(options) {
             })
             .then( result => {
                 console.log(`${result.data.length} flaw(s) found, (result code: ${result.status})`);
+                console.log('Old GH issue: '+JSON.stringify(result.data))
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
@@ -125,9 +126,8 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-        
-        console.log('Old flaw: '+JSON.stringify(flawData))
-        var issue_number = flawData._embedded.data.number
+
+        var issue_number = NEED_TO_FIND_ISSUE_NUMBER
         console.log('isseue_number1: '+issue_number)
 
         let vid = createVeracodeFlawID(flaw);
