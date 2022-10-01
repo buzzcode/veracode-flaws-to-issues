@@ -39,7 +39,7 @@ try {
         const pr_repository = process.env.GITHUB_REPOSITORY
         const pr_repo = pr_repository.split("/");
         const pr_commentID = pr_context.payload.pull_request.number
-        console.log('PR Context: '+pr_context+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+        console.log('PR Context: '+JSON.stringify(pr_context)+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
     }
 
     // do the thing
