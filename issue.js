@@ -65,16 +65,13 @@ async function addVeracodeIssue(options, issue) {
     });
 }
 
-async function addVeracodeIssueComment(options, issue) {
+async function addVeracodeIssueComment(options, issueComment) {
 
-    const label = require('./label');
     const ApiError = require('./util').ApiError;
 
     const githubOwner = options.githubOwner;
     const githubRepo = options.githubRepo;
     const githubToken = options.githubToken;
-
-    console.debug(`Adding Issue for ${issue.title}`);
 
     var authToken = 'token ' + githubToken;
 
@@ -87,9 +84,9 @@ async function addVeracodeIssueComment(options, issue) {
         },
         owner: githubOwner,
         repo: githubRepo,
-        issue_number: issue_number,
+        issue_number: issue_comment.issue_number,
         data: {
-            "body": issue.pr_link
+            "body": issueComment.pr_link
         }
     })
     .catch( error => {

@@ -5,6 +5,7 @@
 const { request } = require('@octokit/request');
 const label = require('./label');
 const addVeracodeIssue = require('./issue').addVeracodeIssue;
+const addVeracodeIssueComment = require('./issue').addVeracodeIssue;
 
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
@@ -142,6 +143,22 @@ async function processPolicyFlaws(options, flawData) {
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
             }
+
+            let issueComment = {
+                'issue_number': flawData._embedded.data.number,
+                'pr_link': pr_link
+            }; 
+
+
+            await addVeracodeIssueComment(options, issueComment)
+            .catch( error => {
+                if(error instanceof util.ApiError) {
+                    throw error;
+                } else {
+                    //console.error(error.message);
+                    throw error; 
+                }
+            })
     
             continue;
         }
