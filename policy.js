@@ -114,7 +114,7 @@ function issueExists(vid) {
 }
 
 function getIssueNumber(vid) {
-    return existingFlawsNumber[parseInt(parseVeracodeFlawID(vid).flawNum)] === true)
+    return existingFlawsNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
 
