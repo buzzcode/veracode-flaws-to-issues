@@ -173,7 +173,7 @@ async function processPolicyFlaws(options, flawData) {
         linestart = eval(flaw.finding_details.file_line_number-5)
         linened = eval(flaw.finding_details.file_line_number+5)
 
-        commit_path = "https://github.com/"+options.githubOwner+"/"+options.githubRepo+"/blob/"+options.commit_hash+"/"+filepath+"#L"+linestart+"-L"+linened
+        let commit_path = "https://github.com/"+options.githubOwner+"/"+options.githubRepo+"/blob/"+options.commit_hash+"/"+filepath+"#L"+linestart+"-L"+linened
 
         //console.log('Full Path:'+commit_path)
 
@@ -186,12 +186,20 @@ async function processPolicyFlaws(options, flawData) {
         let title = `${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}') ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
-        //let bodyText = `**Filename:** ${flaw.finding_details.file_name}`;
+        
+        if ( options.pr_commentId ){
+            let pr = `url: https://github.com/`+options.githubOwner+`/`+options.githubRepo
+            //https://api.github.com/repos/octocat/Hello-World/pulls/1347
+        }
+
+
         let bodyText = `${commit_path}`;
         bodyText += `\n\n**Filename:** ${flaw.finding_details.file_name}`;
         bodyText += `\n\n**Line:** ${flaw.finding_details.file_line_number}`;
         bodyText += `\n\n**CWE:** ${flaw.finding_details.cwe.id} (${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}'))`;
         bodyText += '\n\n' + decodeURI(flaw.description);
+
+        console.log('bodyText: '+bodyText)
 
         let issue = {
             'title': title,
@@ -237,3 +245,4 @@ async function processPolicyFlaws(options, flawData) {
 }
 
 module.exports = { processPolicyFlaws }
+

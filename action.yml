@@ -1,4 +1,4 @@
-name: 'Veracode scan results to GitHub issues'
+name: 'Veracode scan results to GitHub issues Action'
 description: 'Import the results of a Veracode scan as Issues for a repo'
 inputs:
   scan-results-json:
