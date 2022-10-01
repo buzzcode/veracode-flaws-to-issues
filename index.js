@@ -24,8 +24,7 @@ try {
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
-    console.log('pull request: '+pullRequest)
-    let isPR = pullRequest.indexOf("pull")
+    const isPR = pullRequest.indexOf("pull")
 
     console.log('Is PR: '+isPR)
 
@@ -37,10 +36,7 @@ try {
    if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
    }
-
     
-
-
     // do the thing
     importFlaws(
         {resultsFile: resultsFile,
@@ -52,7 +48,7 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
-         isPr: isPr
+         isPR: isPR
         }
     )
     .catch(error => {console.error(`Failure at ${error.stack}`)});
