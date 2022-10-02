@@ -76,7 +76,7 @@ async function addVeracodeIssueComment(options, issueComment) {
     var authToken = 'token ' + githubToken;
 
     console.log('Running on a PR, adding PR to the issue.')
-    console.log('pr_link: '+issue.pr_link+'\nissue_number: '+issue_number)
+    console.log('pr_link: '+issueComment.pr_link+'\nissue_number: '+issueComment.issue_number)
         
     await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
         headers: {
@@ -84,7 +84,7 @@ async function addVeracodeIssueComment(options, issueComment) {
         },
         owner: githubOwner,
         repo: githubRepo,
-        issue_number: issue_comment.issue_number,
+        issue_number: issueComment.issue_number,
         data: {
             "body": issueComment.pr_link
         }
@@ -97,7 +97,7 @@ async function addVeracodeIssueComment(options, issueComment) {
 
             throw new ApiError('Rate Limiter tripped');
         } else {
-            throw new Error (`Error ${error.status} creating Issue for \"${issue.title}\": ${error.message}`);
+            throw new Error (`Error ${error.status} creating Issue for \"${issueComment.issue_number}\": ${error.message}`);
         }           
     });
 }
