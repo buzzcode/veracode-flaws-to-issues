@@ -114,7 +114,7 @@ function issueExists(vid) {
 }
 
 function getIssueNumber(vid) {
-    return existingFlawsNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
+    return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
 
@@ -137,7 +137,7 @@ async function processPolicyFlaws(options, flawData) {
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
-        var issue_number = getIssueNumber(vid)
+        let issue_number = getIssueNumber(vid)
         console.log('isseue_number1: '+issue_number)
 
         // check for mitigation
