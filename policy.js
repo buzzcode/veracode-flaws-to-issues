@@ -5,7 +5,7 @@
 const { request } = require('@octokit/request');
 const label = require('./label');
 const addVeracodeIssue = require('./issue').addVeracodeIssue;
-const addVeracodeIssueComment = require('./issue').addVeracodeIssueComment;
+const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComment;
 
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
