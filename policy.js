@@ -81,9 +81,7 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
-
                     let issue_number = element.number
-                    console.log('issue number set 1: '+ issue_number)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -92,7 +90,6 @@ async function getAllVeracodeIssues(options) {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
-                        console.log('issue number set 2: '+ issue_number)
                     }
                 })
 
@@ -120,8 +117,6 @@ function issueExists(vid) {
 }
 
 function getIssueNumber(vid) {
-    console.log('get issue number flawNuw: '+parseInt(parseVeracodeFlawID(vid).flawNum))
-    console.log('get issue number issue number: '+existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)])
     return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
@@ -160,8 +155,6 @@ async function processPolicyFlaws(options, flawData) {
             if ( options.isPR >= 1 ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
-                
-                console.log('isseue_number2: '+issue_number)
 
                 let issueComment = {
                     'issue_number': issue_number,

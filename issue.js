@@ -75,8 +75,8 @@ async function addVeracodeIssueComment(options, issueComment) {
 
     var authToken = 'token ' + githubToken;
 
-    console.log('Running on a PR, adding PR to the issue.')
-    console.log('pr_link: '+issueComment.pr_link+'\nissue_number: '+issueComment.issue_number)
+    console.log('Adding PR to the issue now.')
+    console.log('pr_link: '+issueComment.pr_link+' - issue_number: '+issueComment.issue_number)
         
     await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
         headers: {
