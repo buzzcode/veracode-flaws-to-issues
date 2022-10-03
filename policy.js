@@ -143,8 +143,8 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-        let issue_number = getIssueNumber(vid)
         let vid = createVeracodeFlawID(flaw);
+        let issue_number = getIssueNumber(vid)
         let issueState = getIssueState(vid)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
