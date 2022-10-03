@@ -74,9 +74,7 @@ async function getAllVeracodeIssues(options) {
             })
             .then( result => {
                 console.log(`${result.data.length} flaw(s) found, (result code: ${result.status})`);
-                //console.log('Old GH issue: '+JSON.stringify(result.data))
-
-                
+                console.log('Old GH issue: '+JSON.stringify(result.data))
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
@@ -136,12 +134,9 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-
+        let issue_number = getIssueNumber(vid)
         let vid = createVeracodeFlawID(flaw);
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
-
-        let issue_number = getIssueNumber(vid)
-        console.log('isseue_number1: '+issue_number)
 
         // check for mitigation
         if(flaw.finding_status.resolution_status == 'APPROVED') {
@@ -219,17 +214,13 @@ async function processPolicyFlaws(options, flawData) {
 
         //console.log('Full Path:'+commit_path)
 
-
-
-
-
         // add to repo's Issues
         // (in theory, we could do this w/o await-ing, but GitHub has rate throttling, so single-threading this helps)
         let title = `${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}') ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
 
-        console.log('prCommentID: '+options.isPR)
+        //console.log('prCommentID: '+options.isPR)
 
         if ( options.isPR >= 1 ){
             pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
@@ -244,7 +235,7 @@ async function processPolicyFlaws(options, flawData) {
         bodyText += `\n\n**CWE:** ${flaw.finding_details.cwe.id} (${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}'))`;
         bodyText += '\n\n' + decodeURI(flaw.description);
 
-        console.log('bodyText: '+bodyText)
+        //console.log('bodyText: '+bodyText)
 
         let issue = {
             'title': title,
