@@ -75,7 +75,6 @@ async function getAllVeracodeIssues(options) {
             })
             .then( result => {
                 console.log(`${result.data.length} flaw(s) found, (result code: ${result.status})`);
-                console.log('Old GH issue: '+JSON.stringify(result.data))
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
@@ -174,6 +173,9 @@ async function processPolicyFlaws(options, flawData) {
                         throw error; 
                     }
                 })
+            }
+            else{
+                console.log('GitHub issue is closed no need to update.')
             }
 
 
