@@ -79,16 +79,17 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
+                    let issue_number = result.data.number
+                    console.log('issue number set 1: '+ issue_number)
 
-                    console.log(JSON.stringify(result))
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
-                        existingFlawNumber[parseInt(flawNum)] = result.number;
-                        console.log('issue number set: '+ result.number)
+                        existingFlawNumber[parseInt(flawNum)] = issue_number;
+                        console.log('issue number set 2: '+ issue_number)
                     }
                 })
 
