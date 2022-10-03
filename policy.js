@@ -10,6 +10,7 @@ const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComme
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
 var existingFlawNumber = [];
+var existingIssueState = [];
 var pr_link
 
 
@@ -80,6 +81,9 @@ async function getAllVeracodeIssues(options) {
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
                     let issue_number = element.number
+                    let issueState = element.state
+
+                    console.log('issue state: '+issueState)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -88,6 +92,7 @@ async function getAllVeracodeIssues(options) {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
+                        existingIssueState[parseInt(flawNum)] = issueState;
                     }
                 })
 
@@ -118,6 +123,10 @@ function getIssueNumber(vid) {
     return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
+function getIssueState(vid) {
+    return existingIssueState[parseInt(parseVeracodeFlawID(vid).flawNum)]
+}
+
 
 
 async function processPolicyFlaws(options, flawData) {
@@ -136,6 +145,7 @@ async function processPolicyFlaws(options, flawData) {
         let flaw = flawData._embedded.findings[index];
         let issue_number = getIssueNumber(vid)
         let vid = createVeracodeFlawID(flaw);
+        let issueState = getIssueState(vid)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for mitigation
@@ -147,7 +157,7 @@ async function processPolicyFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
-            if ( options.isPR >= 1 ){
+            if ( options.isPR >= 1 && issueState == "open" ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
 

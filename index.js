@@ -26,7 +26,7 @@ try {
     let pullRequest = process.env.GITHUB_REF
     const isPR = pullRequest.indexOf("pull")
 
-    console.log('Is PR: '+isPR)
+    console.log('We run on a PR and PR ID is '+isPR)
 
     var pr_context
     var pr_commentID
