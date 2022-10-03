@@ -87,6 +87,7 @@ async function getAllVeracodeIssues(options) {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
                         existingFlawNumber[parseInt(flawNum)] = result.data.number;
+                        console.log('issue number set: '+ result.data.number)
                     }
                 })
 
@@ -114,6 +115,8 @@ function issueExists(vid) {
 }
 
 function getIssueNumber(vid) {
+    console.log('get issue number flawNuw: '+parseInt(parseVeracodeFlawID(vid).flawNum))
+    console.log('get issue number issue number: '+existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)])
     return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
