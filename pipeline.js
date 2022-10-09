@@ -132,14 +132,15 @@ async function getAllVeracodeIssues(options) {
                     let flawID = getVeracodeFlawID(element.title);
                     let issue_number = element.number
                     let issueState = element.state
+                    console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        existingFlawNumber[parseInt(flawNum)] = issue_number;
-                        existingIssueState[parseInt(flawNum)] = issueState;
+                        existingFlawNumber[parseInt(flawID)] = issue_number;
+                        existingIssueState[parseInt(flawID)] = issueState;
                     }
                 })
 
