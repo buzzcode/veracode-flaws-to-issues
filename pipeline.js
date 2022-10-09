@@ -163,6 +163,33 @@ async function processPipelineFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
+            if ( options.isPR >= 1 && issueState == "open" ){
+                console.log('We are on a PR, need to link this issue to this PR')
+                pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+
+                let issueComment = {
+                    'issue_number': issue_number,
+                    'pr_link': pr_link
+                }; 
+    
+    
+                await addVeracodeIssueComment(options, issueComment)
+                .catch( error => {
+                    if(error instanceof util.ApiError) {
+                        throw error;
+                    } else {
+                        //console.error(error.message);
+                        throw error; 
+                    }
+                })
+            }
+            else{
+                console.log('GitHub issue is closed no need to update.')
+            }
+
+
+
+
             continue;
         }
 
@@ -177,6 +204,7 @@ async function processPipelineFlaws(options, flawData) {
         }
 
         filename = flaw.files.source_file.file
+        var filepath = filename
 
         if (options.source_base_path_1 || options.source_base_path_2 || options.source_base_path_3){
             orgPath1 = options.source_base_path_1.split(":")
