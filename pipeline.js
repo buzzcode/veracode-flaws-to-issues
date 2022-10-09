@@ -245,6 +245,13 @@ async function processPipelineFlaws(options, flawData) {
         let title = `${flaw.issue_type} ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'pipeline').name;
         let severity = flaw.severity;
+
+        if ( options.isPR >= 1 ){
+            pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+        }
+
+        console.log('pr_link: '+pr_link)
+
         let bodyText = `${commit_path}`;
         bodyText += `\n\n**Filename:** ${flaw.files.source_file.file}`;
         bodyText += `\n\n**Line:** ${flaw.files.source_file.line}`;
@@ -255,7 +262,8 @@ async function processPipelineFlaws(options, flawData) {
             'title': title,
             'label': lableBase,
             'severity': severity,
-            'body': bodyText
+            'body': bodyText,
+            'pr_link': pr_link
         };
         
         await addVeracodeIssue(options, issue)
