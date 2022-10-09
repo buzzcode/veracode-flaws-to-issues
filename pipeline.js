@@ -5,6 +5,7 @@
 const { request } = require('@octokit/request');
 const label = require('./label');
 const addVeracodeIssue = require('./issue').addVeracodeIssue;
+const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComment;
 
 /* Map of files that contain flaws
  *  each entry is a struct of {CWE, line_number}  
