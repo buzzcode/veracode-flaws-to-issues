@@ -176,8 +176,9 @@ async function processPipelineFlaws(options, flawData) {
         let flaw = flawData.findings[index];
 
         let vid = createVeracodeFlawID(flaw);
-        let issue_number = getIssueNumber(vid)
-        let issueState = getIssueState(vid)
+
+        let issue_number = getIssueNumber(flaw)
+        let issueState = getIssueState(flaw)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for duplicate
@@ -186,7 +187,7 @@ async function processPipelineFlaws(options, flawData) {
             if ( options.isPR >= 1 && issueState == "open" ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
-                console.log('PR Link: '+pr_link)
+                console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
 
                 let issueComment = {
                     'issue_number': issue_number,
