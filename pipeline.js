@@ -12,6 +12,10 @@ const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComme
  *  for some admittedly loose, fuzzy matching to prevent duplicate issues */
 var flawFiles = new Map();
 
+var existingFlawNumber = [];
+var existingIssueState = [];
+var pr_link
+
 function createVeracodeFlawID(flaw) {
     // [VID:CWE:filename:linenum]
     return('[VID:' + flaw.cwe_id +':' + flaw.files.source_file.file + ':' + flaw.files.source_file.line + ']')
@@ -37,6 +41,14 @@ function parseVeracodeFlawID(vid) {
         "file": parts[2],
         "line": parts[3].substring(0, parts[3].length - 1)
       })
+}
+
+function getIssueNumber(vid) {
+    return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
+}
+
+function getIssueState(vid) {
+    return existingIssueState[parseInt(parseVeracodeFlawID(vid).flawNum)]
 }
 
 function addExistingFlawToMap(vid) {
@@ -118,12 +130,16 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
+                    let issue_number = element.number
+                    let issueState = element.state
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
+                        existingFlawNumber[parseInt(flawNum)] = issue_number;
+                        existingIssueState[parseInt(flawNum)] = issueState;
                     }
                 })
 
@@ -159,6 +175,8 @@ async function processPipelineFlaws(options, flawData) {
         let flaw = flawData.findings[index];
 
         let vid = createVeracodeFlawID(flaw);
+        let issue_number = getIssueNumber(vid)
+        let issueState = getIssueState(vid)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for duplicate
