@@ -132,7 +132,7 @@ async function getAllVeracodeIssues(options) {
                     let flawID = getVeracodeFlawID(element.title);
                     let issue_number = element.number
                     let issueState = element.state
-                    console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
+                    //console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -186,6 +186,7 @@ async function processPipelineFlaws(options, flawData) {
             if ( options.isPR >= 1 && issueState == "open" ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+                console.log('PR Link: '+pr_link)
 
                 let issueComment = {
                     'issue_number': issue_number,
