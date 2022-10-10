@@ -137,10 +137,10 @@ async function getAllVeracodeIssues(options) {
                     let flawNum = parseVeracodeFlawIDNum(flawID).flawNum
                     console.log('FlawNum: '+flawNum)
                     var arrayKey = parseInt(flawNum)
-                    console.log('FlawID: '+flawID+' - Array Key: '+arrayKey+' - Element Title: '+element.title)
+                    console.log('FlawID: '+flawID+' - Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
-                    console.log('Issue number: '+issue_number+' - issue state: '+issueState)
+                    console.log('Issue number: '+issue_number+' - issue state: '+issueState+' - Array Key: '+arrayKey)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -149,7 +149,7 @@ async function getAllVeracodeIssues(options) {
                         addExistingFlawToMap(flawID);
                         existingFlawNumber[arrayKey] = issue_number;
                         existingIssueState[arrayKey] = issueState;
-                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
+                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[arrayKey])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[arrayKey]))
                     }
                 })
 
@@ -187,11 +187,12 @@ async function processPipelineFlaws(options, flawData) {
 
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
-        let issue_number = existingFlawNumber[parseInt(vid)]
+        let flawNum = parseVeracodeFlawIDNum(vid).flawNum
+        let issue_number = existingFlawNumber[parseInt(flawNum)]
         console.log('Issue Number: '+issue_number)
-        let issueState = existingIssueState[parseInt(vid)]
+        let issueState = existingIssueState[parseInt(flawNum)]
         console.log('Issue Number: '+issueState)
-        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
+        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub FlawID: ${issue_number}, GitHub Issue State: ${issueState}`);
 
 
         // check for duplicate
