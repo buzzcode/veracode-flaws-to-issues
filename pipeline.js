@@ -92,7 +92,7 @@ function issueExists(vid) {
 
                 let existingFlawLine = parseInt(existingFlaw.line);
                 if( (newFlawLine >= (existingFlawLine - 10)) && (newFlawLine <= (existingFlawLine + 10)) ) {
-                    console.log('Issue Exists = existingFlaw: '+JSON.stringify(existingFlaw)+' - Flaw Info: '+flawInfo)
+                    console.log('Issue Exists = existingFlaw: '+JSON.stringify(existingFlaw)+' - Flaw Info: '+JSON.stringify(flawInfo))
                     return true;
                 }
             }
