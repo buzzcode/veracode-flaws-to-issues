@@ -54,11 +54,11 @@ function parseVeracodeFlawID(vid) {
 }
 
 function getIssueNumber(vid) {
-    return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
+    return existingFlawNumber[parseInt(vid)]
 }
 
 function getIssueState(vid) {
-    return existingIssueState[parseInt(parseVeracodeFlawID(vid).flawNum)]
+    return existingIssueState[parseInt(vid)]
 }
 
 function addExistingFlawToMap(vid) {
@@ -152,14 +152,9 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        
-                        /*
-                        flawNum = parseVeracodeFlawNum(flawID).flawNum;
-                        console.log('FlawNum: '+flawNum)
-                        existingFlawNumber[parseInt(flawNum)] = issue_number;
-                        existingIssueState[parseInt(flawNum)] = issueState;
+                        existingFlawNumber[parseInt(flawID)] = issue_number;
+                        existingIssueState[parseInt(flawID)] = issueState;
                         console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
-                        */
                     }
                 })
 
@@ -198,18 +193,12 @@ async function processPipelineFlaws(options, flawData) {
 
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
-
-        /*
-        let flawID = getVeracodeFlawID(flaw.issue_type);
-        console.log('Issue Title Flaw ID '+flawID)
-
-        let issue_number = getIssueNumber(flawID)
-        let issueState = getIssueState(flawID)
+        let issue_number = getIssueNumber(parseInt(flawID))
+        console.log('Issue Number: '+issue_number)
+        let issueState = getIssueState(parseInt(flawID))
+        console.log('Issue Number: '+issueState)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
-        */
 
-        //for debugging
-        let issueState = 'open'
 
         // check for duplicate
         if(issueExists(vid)) {
