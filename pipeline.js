@@ -32,6 +32,16 @@ function getVeracodeFlawID(title) {
     return title.substring(start, end+1);
 }
 
+
+function parseVeracodeFlawNum(vid) {
+    let parts = vid.split(':');
+
+    return ({
+        "prefix": parts[0],
+        "flawNum": parts[1].substring(0, parts[1].length - 1)
+      })
+}
+
 function parseVeracodeFlawID(vid) {
     let parts = vid.split(':');
 
@@ -141,7 +151,7 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        flawNum = parseVeracodeFlawID(flawID).flawNum;
+                        flawNum = parseVeracodeFlawNum(flawID).flawNum;
                         console.log('FlawNum: '+flawNum)
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
                         existingIssueState[parseInt(flawNum)] = issueState;
