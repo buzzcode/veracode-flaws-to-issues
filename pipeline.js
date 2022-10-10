@@ -175,9 +175,9 @@ async function processPipelineFlaws(options, flawData) {
 
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
-        let issue_number = existingFlawNumber[parseInt(flawID)]
+        let issue_number = existingFlawNumber[parseInt(vid)]
         console.log('Issue Number: '+issue_number)
-        let issueState = existingIssueState[parseInt(flawID)]
+        let issueState = existingIssueState[parseInt(vid)]
         console.log('Issue Number: '+issueState)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
 
