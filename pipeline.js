@@ -151,11 +151,14 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
+                        
+                        /*
                         flawNum = parseVeracodeFlawNum(flawID).flawNum;
                         console.log('FlawNum: '+flawNum)
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
                         existingIssueState[parseInt(flawNum)] = issueState;
                         console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
+                        */
                     }
                 })
 
@@ -191,8 +194,6 @@ async function processPipelineFlaws(options, flawData) {
         let flaw = flawData.findings[index]
 
         console.log('Full falw data: '+JSON.stringify(flaw))
-        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber))
-        console.log('Exisiting Issue State: '+JSON.stringify(existingIssueState))
 
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
@@ -211,7 +212,7 @@ async function processPipelineFlaws(options, flawData) {
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
                 console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
-
+/*
                 let issueComment = {
                     'issue_number': issue_number,
                     'pr_link': pr_link
@@ -227,6 +228,7 @@ async function processPipelineFlaws(options, flawData) {
                         throw error; 
                     }
                 })
+*/
             }
             else{
                 console.log('GitHub issue is closed no need to update.')
