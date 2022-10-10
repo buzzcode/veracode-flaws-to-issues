@@ -129,14 +129,12 @@ async function getAllVeracodeIssues(options) {
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
-                    console.log('Element array: '+JSON.stringify(element))
-
-
+                    //console.log('Element array: '+JSON.stringify(element))
                     let flawID = getVeracodeFlawID(element.title);
                     console.log('FlawID: '+flawID+' - Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
-                    console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
+                    console.log('Issue number: '+issue_number+' - issue state: '+issueState)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -144,6 +142,7 @@ async function getAllVeracodeIssues(options) {
                     } else {
                         addExistingFlawToMap(flawID);
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
+                        console.log('FlawNum: '+flawNum)
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
                         existingIssueState[parseInt(flawNum)] = issueState;
                     }
