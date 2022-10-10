@@ -130,6 +130,7 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
+                    console.log('Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
                     //console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
@@ -173,12 +174,14 @@ async function processPipelineFlaws(options, flawData) {
     console.log(`Processing input file: \"${options.resultsFile}\" with ${flawData.findings.length} flaws to process.`)
     var index;
     for( index=0; index < flawData.findings.length; index++) {
-        let flaw = flawData.findings[index];
+        let flaw = flawData.findings[index]
+
+        console.log('Full falw data: '+JSON.stringify(flawData))
 
         let vid = createVeracodeFlawID(flaw);
 
-        let issue_number = getIssueNumber(flaw)
-        let issueState = getIssueState(flaw)
+        let issue_number = getIssueNumber(vid)
+        let issueState = getIssueState(vid)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for duplicate
