@@ -131,7 +131,7 @@ async function getAllVeracodeIssues(options) {
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
-                    console.log('Element array: '+JSON.stringify(element))
+                    //console.log('Element array: '+JSON.stringify(element))
                     let flawID = getVeracodeFlawID(element.title);
                     console.log('FlawId: '+flawID)
                     let flawNum = parseVeracodeFlawIDNum(flawID).flawNum
