@@ -36,7 +36,7 @@ function parseVeracodeFlawIDNum(vid) {
 
     return ({
         "prefix": parts[0],
-        "flawNum": parts[1].substring(0, parts[1].length - 1)
+        "flawNum": parts[1].substring(0, parts[1].length)
       })
 }
 
@@ -183,6 +183,7 @@ async function processPipelineFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData.findings.length; index++) {
         let flaw = flawData.findings[index]
+        console.log('Flaw: '+JSON.stringify(flaw))
 
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
