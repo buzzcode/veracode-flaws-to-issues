@@ -83,7 +83,6 @@ function issueExists(vid) {
 
                 let existingFlawLine = parseInt(existingFlaw.line);
                 if( (newFlawLine >= (existingFlawLine - 10)) && (newFlawLine <= (existingFlawLine + 10)) ) {
-                    console.log('Issue Exists = existingFlaw: '+JSON.stringify(existingFlaw)+' - Flaw Info: '+JSON.stringify(flawInfo))
                     return true;
                 }
             }
@@ -131,16 +130,11 @@ async function getAllVeracodeIssues(options) {
 
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
-                    //console.log('Element array: '+JSON.stringify(element))
                     let flawID = getVeracodeFlawID(element.title);
-                    console.log('FlawId: '+flawID)
                     let flawNum = parseVeracodeFlawIDNum(flawID).flawNum
-                    console.log('FlawNum: '+flawNum)
                     var arrayKey = parseInt(flawNum)
-                    console.log('FlawID: '+flawID+' - Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
-                    console.log('Issue number: '+issue_number+' - issue state: '+issueState+' - Array Key: '+arrayKey)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -149,7 +143,7 @@ async function getAllVeracodeIssues(options) {
                         addExistingFlawToMap(flawID);
                         existingFlawNumber[flawID] = issue_number;
                         existingIssueState[flawID] = issueState;
-                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[flawID])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[flawID]))
+                        //console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[flawID])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[flawID]))
                     }
                 })
 
@@ -183,15 +177,10 @@ async function processPipelineFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData.findings.length; index++) {
         let flaw = flawData.findings[index]
-        console.log('Flaw: '+JSON.stringify(flaw))
-
         let vid = createVeracodeFlawID(flaw)
-        console.log('vid: '+vid)
         let flawNum = parseVeracodeFlawIDNum(vid).flawNum
         let issue_number = existingFlawNumber[vid]
-        console.log('Issue Number: '+issue_number)
         let issueState = existingIssueState[vid]
-        console.log('Issue Number: '+issueState)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub FlawID: ${issue_number}, GitHub Issue State: ${issueState}`);
 
 
@@ -201,7 +190,7 @@ async function processPipelineFlaws(options, flawData) {
             if ( options.isPR >= 1 && issueState == "open" ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
-                console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
+                //console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
 
                 let issueComment = {
                     'issue_number': issue_number,
