@@ -133,8 +133,8 @@ async function getAllVeracodeIssues(options) {
                 result.data.forEach(element => {
                     console.log('Element array: '+JSON.stringify(element))
                     let flawID = getVeracodeFlawID(element.title);
-                    console.log('FlawId: '+flawId)
-                    let flawNum = parseVeracodeFlawIDNum(flawId).flawNum
+                    console.log('FlawId: '+flawID)
+                    let flawNum = parseVeracodeFlawIDNum(flawID).flawNum
                     console.log('FlawNum: '+flawNum)
                     var arrayKey = parseInt(flawNum)
                     console.log('FlawID: '+flawID+' - Array Key: '+arrayKey+' - Element Title: '+element.title)
