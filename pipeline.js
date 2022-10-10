@@ -176,7 +176,7 @@ async function processPipelineFlaws(options, flawData) {
     for( index=0; index < flawData.findings.length; index++) {
         let flaw = flawData.findings[index]
 
-        //console.log('Full falw data: '+JSON.stringify(flawData))
+        console.log('Full falw data: '+JSON.stringify(flaw))
 
         let vid = createVeracodeFlawID(flaw);
         console.log('Flaw title: '+flaw.issue_type)
