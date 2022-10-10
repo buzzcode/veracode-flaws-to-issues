@@ -140,8 +140,9 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        existingFlawNumber[parseInt(flawID)] = issue_number;
-                        existingIssueState[parseInt(flawID)] = issueState;
+                        flawNum = parseVeracodeFlawID(flawID).flawNum;
+                        existingFlawNumber[parseInt(flawNum)] = issue_number;
+                        existingIssueState[parseInt(flawNum)] = issueState;
                     }
                 })
 
