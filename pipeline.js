@@ -31,6 +31,15 @@ function getVeracodeFlawID(title) {
     return title.substring(start, end+1);
 }
 
+function parseVeracodeFlawIDNum(vid) {
+    let parts = vid.split(':');
+
+    return ({
+        "prefix": parts[0],
+        "flawNum": parts[1].substring(0, parts[1].length - 1)
+      })
+}
+
 function parseVeracodeFlawID(vid) {
     let parts = vid.split(':');
 
@@ -124,7 +133,10 @@ async function getAllVeracodeIssues(options) {
                 result.data.forEach(element => {
                     //console.log('Element array: '+JSON.stringify(element))
                     let flawID = getVeracodeFlawID(element.title);
-                    console.log('FlawID: '+flawID+' - Element Title: '+element.title)
+                    let flawNum = parseVeracodeFlawIDNum(flawId).flawNum
+                    console.log('FlawNum: '+flawNum)
+                    var arrayKey = parseInt(flawNum)
+                    console.log('FlawID: '+flawID+' - Array Key: '+arrayKey+' - Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
                     console.log('Issue number: '+issue_number+' - issue state: '+issueState)
@@ -134,8 +146,6 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        var arrayKey = parseInt(flawID)
-                        console.log('Array Key: '+arrayKey)
                         existingFlawNumber[arrayKey] = issue_number;
                         existingIssueState[arrayKey] = issueState;
                         console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
