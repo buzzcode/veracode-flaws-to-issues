@@ -38,7 +38,7 @@ function parseVeracodeFlawNum(vid) {
 
     return ({
         "prefix": parts[0],
-        "flawNum": parts[1].substring(0, parts[1].length - 1)
+        "flawNum": parts[1].substring(0, parts[1].length)
       })
 }
 
