@@ -208,6 +208,9 @@ async function processPipelineFlaws(options, flawData) {
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
         */
 
+        //for debugging
+        let issueState = 'open'
+
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
