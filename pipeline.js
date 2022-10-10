@@ -176,13 +176,16 @@ async function processPipelineFlaws(options, flawData) {
     for( index=0; index < flawData.findings.length; index++) {
         let flaw = flawData.findings[index]
 
-        console.log('Full falw data: '+JSON.stringify(flawData))
+        //console.log('Full falw data: '+JSON.stringify(flawData))
 
         let vid = createVeracodeFlawID(flaw);
 
-        let issue_number = getIssueNumber(vid)
-        let issueState = getIssueState(vid)
-        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
+        let flawID = getVeracodeFlawID(flawData.findings[index].issue_type);
+        console.log('Issue Title Flaw ID '+flawID)
+
+        let issue_number = getIssueNumber(flawID)
+        let issueState = getIssueState(flawID)
+        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
 
         // check for duplicate
         if(issueExists(vid)) {
