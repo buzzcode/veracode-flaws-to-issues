@@ -130,10 +130,10 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
-                    console.log('Element Title: '+element.title)
+                    console.log('FlawID: '+flawID+' - Element Title: '+element.title)
                     let issue_number = element.number
                     let issueState = element.state
-                    //console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
+                    console.log('Issue number: '+issue_number+' - issue state: '+issue_number)
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -179,7 +179,7 @@ async function processPipelineFlaws(options, flawData) {
         console.log('Full falw data: '+JSON.stringify(flaw))
         console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber))
         console.log('Exisiting Flaw State: '+JSON.stringify(existingFlawState))
-        
+
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
 
