@@ -189,7 +189,7 @@ async function processPipelineFlaws(options, flawData) {
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
                 console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
-/*
+
                 let issueComment = {
                     'issue_number': issue_number,
                     'pr_link': pr_link
@@ -205,7 +205,7 @@ async function processPipelineFlaws(options, flawData) {
                         throw error; 
                     }
                 })
-*/
+
             }
             else{
                 console.log('GitHub issue is closed no need to update.')
