@@ -147,9 +147,9 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        existingFlawNumber[arrayKey] = issue_number;
-                        existingIssueState[arrayKey] = issueState;
-                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[arrayKey])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[arrayKey]))
+                        existingFlawNumber[flawID] = issue_number;
+                        existingIssueState[flawID] = issueState;
+                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[flawID])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[flawID]))
                     }
                 })
 
@@ -188,9 +188,9 @@ async function processPipelineFlaws(options, flawData) {
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
         let flawNum = parseVeracodeFlawIDNum(vid).flawNum
-        let issue_number = existingFlawNumber[parseInt(flawNum)]
+        let issue_number = existingFlawNumber[vid]
         console.log('Issue Number: '+issue_number)
-        let issueState = existingIssueState[parseInt(flawNum)]
+        let issueState = existingIssueState[vid]
         console.log('Issue Number: '+issueState)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub FlawID: ${issue_number}, GitHub Issue State: ${issueState}`);
 
