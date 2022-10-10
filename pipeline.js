@@ -92,6 +92,7 @@ function issueExists(vid) {
 
                 let existingFlawLine = parseInt(existingFlaw.line);
                 if( (newFlawLine >= (existingFlawLine - 10)) && (newFlawLine <= (existingFlawLine + 10)) ) {
+                    console.log('Issue Exists = existingFlaw: '+JSON.stringify(existingFlaw)+' - Flaw Info: '+flawInfo)
                     return true;
                 }
             }
@@ -198,12 +199,14 @@ async function processPipelineFlaws(options, flawData) {
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
 
+        /*
         let flawID = getVeracodeFlawID(flaw.issue_type);
         console.log('Issue Title Flaw ID '+flawID)
 
         let issue_number = getIssueNumber(flawID)
         let issueState = getIssueState(flawID)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
+        */
 
         // check for duplicate
         if(issueExists(vid)) {
