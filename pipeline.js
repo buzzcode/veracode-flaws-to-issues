@@ -11,7 +11,6 @@ const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComme
  *  each entry is a struct of {CWE, line_number}  
  *  for some admittedly loose, fuzzy matching to prevent duplicate issues */
 var flawFiles = new Map();
-
 var existingFlawNumber = [];
 var existingIssueState = [];
 var pr_link
@@ -32,16 +31,6 @@ function getVeracodeFlawID(title) {
     return title.substring(start, end+1);
 }
 
-
-function parseVeracodeFlawNum(vid) {
-    let parts = vid.split(':');
-
-    return ({
-        "prefix": parts[0],
-        "flawNum": parts[1].substring(0, parts[1].length)
-      })
-}
-
 function parseVeracodeFlawID(vid) {
     let parts = vid.split(':');
 
@@ -53,13 +42,6 @@ function parseVeracodeFlawID(vid) {
       })
 }
 
-function getIssueNumber(vid) {
-    return existingFlawNumber[parseInt(vid)]
-}
-
-function getIssueState(vid) {
-    return existingIssueState[parseInt(vid)]
-}
 
 function addExistingFlawToMap(vid) {
     let flawInfo = parseVeracodeFlawID(vid);
@@ -152,8 +134,10 @@ async function getAllVeracodeIssues(options) {
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
-                        existingFlawNumber[parseInt(flawID)] = issue_number;
-                        existingIssueState[parseInt(flawID)] = issueState;
+                        var arrayKey = parseInt(flawID)
+                        console.log('Array Key: '+arrayKey)
+                        existingFlawNumber[arrayKey] = issue_number;
+                        existingIssueState[arrayKey] = issueState;
                         console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
                     }
                 })
@@ -189,13 +173,11 @@ async function processPipelineFlaws(options, flawData) {
     for( index=0; index < flawData.findings.length; index++) {
         let flaw = flawData.findings[index]
 
-        console.log('Full falw data: '+JSON.stringify(flaw))
-
         let vid = createVeracodeFlawID(flaw)
         console.log('vid: '+vid)
-        let issue_number = getIssueNumber(parseInt(flawID))
+        let issue_number = existingFlawNumber[parseInt(flawID)]
         console.log('Issue Number: '+issue_number)
-        let issueState = getIssueState(parseInt(flawID))
+        let issueState = existingIssueState[parseInt(flawID)]
         console.log('Issue Number: '+issueState)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub Issue State: ${issueState}`);
 
