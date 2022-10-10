@@ -145,6 +145,7 @@ async function getAllVeracodeIssues(options) {
                         console.log('FlawNum: '+flawNum)
                         existingFlawNumber[parseInt(flawNum)] = issue_number;
                         existingIssueState[parseInt(flawNum)] = issueState;
+                        console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber)+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState))
                     }
                 })
 
