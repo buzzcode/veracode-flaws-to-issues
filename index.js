@@ -40,6 +40,22 @@ try {
     
 
 
+    core.info('check if we run on a pull request')
+    let pullRequest = process.env.GITHUB_REF
+    let isPR = pullRequest?.indexOf("pull")
+
+    console.log('Is PR: '+isPR)
+
+    if ( isPR >= 1 ){
+        core.info("This run is part of a PR, should add some PR comment")
+
+        const pr_context = github.context
+        const pr_repository = process.env.GITHUB_REPOSITORY
+        const pr_repo = pr_repository.split("/");
+        const pr_commentID = context.payload.pull_request?.number
+        console.log('PR Context: '+pr_context+'\nPr Repository: '+pr_repository+'\nPr Repo: '+pr_repo+'\nPR Comment ID: '+pr_commentID)
+    }
+
     // do the thing
     importFlaws(
         {resultsFile: resultsFile,
@@ -51,7 +67,9 @@ try {
          source_base_path_2: source_base_path_2,
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
-         isPR: isPR,
+         pr_context: pr_context,
+         pr_repository: pr_repository,
+         pr_repo: pr_repo,
          pr_commentID: pr_commentID
         }
     )
