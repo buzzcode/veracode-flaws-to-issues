@@ -5,11 +5,15 @@
 const { request } = require('@octokit/request');
 const label = require('./label');
 const addVeracodeIssue = require('./issue').addVeracodeIssue;
+const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComment;
 
 /* Map of files that contain flaws
  *  each entry is a struct of {CWE, line_number}  
  *  for some admittedly loose, fuzzy matching to prevent duplicate issues */
 var flawFiles = new Map();
+var existingFlawNumber = [];
+var existingIssueState = [];
+var pr_link
 
 function createVeracodeFlawID(flaw) {
     // [VID:CWE:filename:linenum]
@@ -27,6 +31,15 @@ function getVeracodeFlawID(title) {
     return title.substring(start, end+1);
 }
 
+function parseVeracodeFlawIDNum(vid) {
+    let parts = vid.split(':');
+
+    return ({
+        "prefix": parts[0],
+        "flawNum": parts[1].substring(0, parts[1].length)
+      })
+}
+
 function parseVeracodeFlawID(vid) {
     let parts = vid.split(':');
 
@@ -37,6 +50,7 @@ function parseVeracodeFlawID(vid) {
         "line": parts[3].substring(0, parts[3].length - 1)
       })
 }
+
 
 function addExistingFlawToMap(vid) {
     let flawInfo = parseVeracodeFlawID(vid);
@@ -117,12 +131,19 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
+                    let flawNum = parseVeracodeFlawIDNum(flawID).flawNum
+                    var arrayKey = parseInt(flawNum)
+                    let issue_number = element.number
+                    let issueState = element.state
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
                         console.log(`Flaw \"${element.title}\" has no Veracode Flaw ID, ignored.`)
                     } else {
                         addExistingFlawToMap(flawID);
+                        existingFlawNumber[flawID] = issue_number;
+                        existingIssueState[flawID] = issueState;
+                        //console.log('Exisiting Flaw Number: '+JSON.stringify(existingFlawNumber[flawID])+' - Exisiting Flaw State: '+JSON.stringify(existingIssueState[flawID]))
                     }
                 })
 
@@ -155,14 +176,46 @@ async function processPipelineFlaws(options, flawData) {
     console.log(`Processing input file: \"${options.resultsFile}\" with ${flawData.findings.length} flaws to process.`)
     var index;
     for( index=0; index < flawData.findings.length; index++) {
-        let flaw = flawData.findings[index];
+        let flaw = flawData.findings[index]
+        let vid = createVeracodeFlawID(flaw)
+        let flawNum = parseVeracodeFlawIDNum(vid).flawNum
+        let issue_number = existingFlawNumber[vid]
+        let issueState = existingIssueState[vid]
+        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}, GitHub FlawID: ${issue_number}, GitHub Issue State: ${issueState}`);
 
-        let vid = createVeracodeFlawID(flaw);
-        console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
+            if ( options.isPR >= 1 && issueState == "open" ){
+                console.log('We are on a PR, need to link this issue to this PR')
+                pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+                //console.log('PR Link: '+pr_link+' - Issue number: '+issue_number)
+
+                let issueComment = {
+                    'issue_number': issue_number,
+                    'pr_link': pr_link
+                }; 
+    
+    
+                await addVeracodeIssueComment(options, issueComment)
+                .catch( error => {
+                    if(error instanceof util.ApiError) {
+                        throw error;
+                    } else {
+                        //console.error(error.message);
+                        throw error; 
+                    }
+                })
+
+            }
+            else{
+                console.log('GitHub issue is closed no need to update.')
+            }
+
+
+
+
             continue;
         }
 
@@ -177,6 +230,7 @@ async function processPipelineFlaws(options, flawData) {
         }
 
         filename = flaw.files.source_file.file
+        var filepath = filename
 
         if (options.source_base_path_1 || options.source_base_path_2 || options.source_base_path_3){
             orgPath1 = options.source_base_path_1.split(":")
@@ -216,6 +270,13 @@ async function processPipelineFlaws(options, flawData) {
         let title = `${flaw.issue_type} ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'pipeline').name;
         let severity = flaw.severity;
+
+        if ( options.isPR >= 1 ){
+            pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+        }
+
+        console.log('pr_link: '+pr_link)
+
         let bodyText = `${commit_path}`;
         bodyText += `\n\n**Filename:** ${flaw.files.source_file.file}`;
         bodyText += `\n\n**Line:** ${flaw.files.source_file.line}`;
@@ -226,7 +287,8 @@ async function processPipelineFlaws(options, flawData) {
             'title': title,
             'label': lableBase,
             'severity': severity,
-            'body': bodyText
+            'body': bodyText,
+            'pr_link': pr_link
         };
         
         await addVeracodeIssue(options, issue)

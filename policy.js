@@ -5,9 +5,13 @@
 const { request } = require('@octokit/request');
 const label = require('./label');
 const addVeracodeIssue = require('./issue').addVeracodeIssue;
+const addVeracodeIssueComment = require('./issue_comment').addVeracodeIssueComment;
 
 // sparse array, element = true if the flaw exists, undefined otherwise
 var existingFlaws = [];
+var existingFlawNumber = [];
+var existingIssueState = [];
+var pr_link
 
 
 
@@ -75,6 +79,8 @@ async function getAllVeracodeIssues(options) {
                 // walk findings and populate VeracodeFlaws map
                 result.data.forEach(element => {
                     let flawID = getVeracodeFlawID(element.title);
+                    let issue_number = element.number
+                    let issueState = element.state
 
                     // Map using VeracodeFlawID as index, for easy searching.  Line # for simple flaw matching
                     if(flawID === null){
@@ -82,6 +88,8 @@ async function getAllVeracodeIssues(options) {
                     } else {
                         flawNum = parseVeracodeFlawID(flawID).flawNum;
                         existingFlaws[parseInt(flawNum)] = true;
+                        existingFlawNumber[parseInt(flawNum)] = issue_number;
+                        existingIssueState[parseInt(flawNum)] = issueState;
                     }
                 })
 
@@ -108,6 +116,16 @@ function issueExists(vid) {
         return false;
 }
 
+function getIssueNumber(vid) {
+    return existingFlawNumber[parseInt(parseVeracodeFlawID(vid).flawNum)]
+}
+
+function getIssueState(vid) {
+    return existingIssueState[parseInt(parseVeracodeFlawID(vid).flawNum)]
+}
+
+
+
 async function processPolicyFlaws(options, flawData) {
 
     const util = require('./util');
@@ -122,8 +140,9 @@ async function processPolicyFlaws(options, flawData) {
     var index;
     for( index=0; index < flawData._embedded.findings.length; index++) {
         let flaw = flawData._embedded.findings[index];
-
         let vid = createVeracodeFlawID(flaw);
+        let issue_number = getIssueNumber(vid)
+        let issueState = getIssueState(vid)
         console.debug(`processing flaw ${flaw.issue_id}, VeracodeID: ${vid}`);
 
         // check for mitigation
@@ -135,6 +154,32 @@ async function processPolicyFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
+            if ( options.isPR >= 1 && issueState == "open" ){
+                console.log('We are on a PR, need to link this issue to this PR')
+                pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
+
+                let issueComment = {
+                    'issue_number': issue_number,
+                    'pr_link': pr_link
+                }; 
+    
+    
+                await addVeracodeIssueComment(options, issueComment)
+                .catch( error => {
+                    if(error instanceof util.ApiError) {
+                        throw error;
+                    } else {
+                        //console.error(error.message);
+                        throw error; 
+                    }
+                })
+            }
+            else{
+                console.log('GitHub issue is closed no need to update.')
+            }
+
+
+    
             continue;
         }
 
@@ -149,6 +194,8 @@ async function processPolicyFlaws(options, flawData) {
 
         filename = flaw.finding_details.file_path
 
+        var filepath = filename
+
         if (options.source_base_path_1 || options.source_base_path_2 || options.source_base_path_3){
             orgPath1 = options.source_base_path_1.split(":")
             orgPath2 = options.source_base_path_2.split(":")
@@ -157,17 +204,17 @@ async function processPolicyFlaws(options, flawData) {
 
             if( filename.includes(orgPath1[0])) {
                 //console.log('file path1: '+filename)
-                filepath = replacePath(options.source_base_path_1, filename)
+                let filepath = replacePath(options.source_base_path_1, filename)
             }
             else if (filename.includes(orgPath2[0])){
                 //console.log('file path2: '+filename)
-                filepath = replacePath(options.source_base_path_2, filename)
+                let filepath = replacePath(options.source_base_path_2, filename)
             }
             else if (filename.includes(orgPath3[0])){
                 //console.log('file path3: '+filename)
-                filepath = replacePath(options.source_base_path_3, filename)
+                let filepath = replacePath(options.source_base_path_3, filename)
             }
-            //console.log('Filepath:'+filepath);
+            console.log('Filepath:'+filepath);
         }
 
         linestart = eval(flaw.finding_details.file_line_number-5)
@@ -177,20 +224,19 @@ async function processPolicyFlaws(options, flawData) {
 
         //console.log('Full Path:'+commit_path)
 
-
-
-
-
         // add to repo's Issues
         // (in theory, we could do this w/o await-ing, but GitHub has rate throttling, so single-threading this helps)
         let title = `${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}') ` + createVeracodeFlawID(flaw);
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
-        
-        if ( options.pr_commentId ){
-            let pr = `url: https://github.com/`+options.githubOwner+`/`+options.githubRepo
-            //https://api.github.com/repos/octocat/Hello-World/pulls/1347
+
+        //console.log('prCommentID: '+options.isPR)
+
+        if ( options.isPR >= 1 ){
+            pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
         }
+
+        console.log('pr_link: '+pr_link)
 
 
         let bodyText = `${commit_path}`;
@@ -199,14 +245,17 @@ async function processPolicyFlaws(options, flawData) {
         bodyText += `\n\n**CWE:** ${flaw.finding_details.cwe.id} (${flaw.finding_details.cwe.name} ('${flaw.finding_details.finding_category.name}'))`;
         bodyText += '\n\n' + decodeURI(flaw.description);
 
-        console.log('bodyText: '+bodyText)
+        //console.log('bodyText: '+bodyText)
 
         let issue = {
             'title': title,
             'label': lableBase,
             'severity': severity,
-            'body': bodyText
+            'body': bodyText,
+            'pr_link': pr_link
         };
+
+        console.log('Issue: '+JSON.stringify(issue))
         
         await addVeracodeIssue(options, issue)
         .catch( error => {
@@ -231,6 +280,8 @@ async function processPolicyFlaws(options, flawData) {
                 throw error; 
             }
         })
+
+        console.log('My Issue Nmbuer: '+addVeracodeIssue.issue_numnber)
 
         // progress counter for large flaw counts
         if( (index > 0) && (index % 25 == 0) )

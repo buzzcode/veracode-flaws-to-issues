@@ -7,6 +7,7 @@ inputs:
     default: 'filtered_results.json'
   github-token:
     description: 'GitHub token to access the repo'
+    default: ${{ github.token }}
     required: true
   wait-time:
     description: 'Delay (in seconds) between entering Issues into GitHub (due to rate limiting)'
@@ -21,9 +22,7 @@ inputs:
   source_base_path_3:
     description: 'Rewrite 3'
     required: false
-  commit-hash:
-    description: 'Commit Hash'
-    required: false
+
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'index.js'
