@@ -22,16 +22,25 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 |Default value |  `"filtered_results.json"`|
 --- | ---
 
-### `github-token`
-
-**Required** GitHub token needed to access the repo.  Normally, when run in a Workflow, use the `{{ secrets.GITHUB-TOKEN }}` that is created by GitHub.  See [here](https://docs.github.com/en/actions/reference/authentication-in-a-workflow) for further information.
-
 ### `wait-time`
 
 **Optional** GitHub (at least the free/public version) has a rate limiter to prevent a user from adding Issues too quickly.  This value is used to insert a small delay between each new issue created so as to not trip the rate limiter.  This value sets the number of seconds between each issue.  See [here](https://docs.github.com/en/rest/guides/best-practices-for-integrators#dealing-with-rate-limits) for additional information.
 | Default value | `"2"` |
 --- | ---
+  
+### `source_base_path_1`, `source_base_path_2`, `source_base_path_3`
+   
+**Optional** In some compilations, the path representation is not the same as the repository root folder. In order to add the ability to navigate back from the scanning issue to the file in the repository, a base path to the source is required. The input format is regex base (`"[search pattern]:[replace with pattern]"`).
+| Default value | `""` |
+--- | ---  
 
+Example:  
+```yml
+source-base-path-1: "^com/veracode:src/main/java/com/veracode"
+source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
+```  
+
+  
 ## Example usage
 
 ### Pipeline Scan
