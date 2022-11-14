@@ -75,6 +75,14 @@ async function importFlaws(options) {
             const internal_flaw_count = count
         })
     }
+
+    // add break build functionality
+    if ( fail_build == "true" ){
+        if ( internal_flaw_count > 0 ){
+            core.info('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
+            core.setFailed('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
+        }
+    }
 }
 
 

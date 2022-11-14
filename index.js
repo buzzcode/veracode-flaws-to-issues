@@ -38,8 +38,6 @@ try {
         pr_commentID = pr_context.payload.pull_request.number
    }
 
-    
-
 
     // do the thing
     importFlaws(
@@ -56,16 +54,6 @@ try {
          pr_commentID: pr_commentID
         }
     )
-
-    // add break build functionality
-    if ( fail_build == "true" ){
-        if ( internal_flaw_count > 0 ){
-            core.info('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
-            core.setFailed('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
-        }
-    }
-
-
 
     .catch(error => {console.error(`Failure at ${error.stack}`)});
 } catch (error) {
