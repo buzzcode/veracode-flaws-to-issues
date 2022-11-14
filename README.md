@@ -39,7 +39,13 @@ Example:
 source-base-path-1: "^com/veracode:src/main/java/com/veracode"
 source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
 ```  
-
+  
+### `fail_build`
+   
+**Optional** If a previous task run and was set to `fail_build: false` as you need to run this `flaws-to-issues` action after the scan is finsihed but you still need to fail the pipeline based on findings from a Veracode scan, this option is require to be set to `true`.
+| Default value | `""` |
+--- | ---   
+  
   
 ## Example usage
 
@@ -48,32 +54,26 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
 ```yaml
   . . . 
 # This first step is assumed to exist already in your Workflow
-  scan:
-    runs-on: ubuntu-latest
-    container: 
-      image: veracode/pipeline-scan:latest
-      options: --user root
-    steps:
-      - name: get archive
-        uses: actions/download-artifact@v2
-        with:
-          name: scan-target
-          path: /tmp
+  pipeline_scan:
+      needs: build
+      runs-on: ubuntu-latest
+      name: pipeline scan
+      steps:
+        - name: checkout repo
+          uses: actions/checkout@v3
 
-      - name: scan
-        run: |
-          java -jar /opt/veracode/pipeline-scan.jar \
-              -vid ${{ secrets.VERACODE_API_ID }}   \
-              -vkey ${{ secrets.VERACODE_API_KEY }} \
-              --file /tmp/upload.zip                \
-              --fail_on_severity="Very High,High"   \
-        continue-on-error: true
-
-      - name: save filtered results file
-        uses: actions/upload-artifact@v2
-        with:
-          name: filtered-results
-          path: filtered_results.json
+        - name: get archive
+          uses: actions/download-artifact@v3
+          with:
+            name: verademo.war
+        - name: pipeline-scan action step
+          id: pipelien-scan
+          uses: veracode/Veracode-pipeline-scan-action@pipeline-scan-beta-v0.0.4
+          with:
+            vid: ${{ secrets.VID }}
+            vkey: ${{ secrets.VKEY }}
+            file: "verademo.war" 
+            fail_build: false
 
 # This step will import the flaws from the step above
   import-issues:
@@ -81,12 +81,12 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
     runs-on: ubuntu-latest
     steps:
       - name: get scan results
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: filtered-results
 
       - name: import flaws as issues
-        uses: buzzcode/veracode-flaws-to-issues@v1
+        uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: 'filtered_results.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -120,7 +120,7 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
           http --auth-type veracode_hmac GET "https://api.veracode.com/appsec/v2/applications/${guid}/findings?scan_type=STATIC&violates_policy=True&size=${total_flaws}" > policy_flaws.json
 
       - name: save results file
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: policy-flaws
           path: /tmp/policy_flaws.json
@@ -131,13 +131,13 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
     runs-on: ubuntu-latest
     steps:
       - name: get flaw file
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: policy-flaws
           path: /tmp
 
       - name: import flaws as issues
-        uses: buzzcode/veracode-flaws-to-issues@v1
+        uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           github-token: ${{ secrets.GITHUB_TOKEN }}
