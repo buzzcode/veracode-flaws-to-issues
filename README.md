@@ -11,7 +11,13 @@ Note that when Issues are added, a tag is inserted into the Issue title.  The ta
 For a Policy or Sandbox scan, this is done with the Findings REST API call, see [Findings REST API](https://help.veracode.com/r/c_findings_v2_intro).
 
 Note that when Issues are added, a tag is inserted into the Issue title.  The tag is of the form `[VID:<flaw_number>]`.  This tag is used to prevent duplicate issues from getting created.  
-
+  
+## Pull request decoration  
+This action now supports pull request decoration. Once an issue is generated and the job runs on a PR, the issue will automatically be linked to the PR. This is done for easy review and an easy approval process.  
+  
+## Fail the build upon findings  
+As this job needs to run after a Veracode pipeline/sandbox/policy scan, the scan job cannot fail the pipeline upon findings as otherwiese the following job, this flaws-to-issues job, won't be started. In order to still fail the pipeline this action now includes and option to fail the pipeline upon findings. Make sure you pass the correct pipelins-scan results or download the correct sandbox/policy scan results (most probably all unmitigated, policy relevant findings) to fail the pipeline.  
+  
 ---
 
 ## Inputs
