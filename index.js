@@ -15,6 +15,7 @@ try {
     const source_base_path_1 = core.getInput('source_base_path_1'); 
     const source_base_path_2 = core.getInput('source_base_path_2'); 
     const source_base_path_3 = core.getInput('source_base_path_3');
+    const fail_build = core.getInput('fail_build');
     const commit_hash = process.env.GITHUB_SHA;
     console.log('resultsFiel: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash)
 
@@ -55,6 +56,17 @@ try {
          pr_commentID: pr_commentID
         }
     )
+
+    // add break build functionality
+    if ( fail_build == "true" ){
+        if ( internal_flaw_count > 0 ){
+            core.info('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
+            core.setFailed('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
+        }
+    }
+
+
+
     .catch(error => {console.error(`Failure at ${error.stack}`)});
 } catch (error) {
     core.setFailed(error.stack);

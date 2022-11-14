@@ -65,14 +65,17 @@ async function importFlaws(options) {
     if(scanType == 'pipeline') {
         await processPipelineFlaws(options, flawData)
         .then (count => {
+            const internal_flaw_count = count
             console.log(`Done.  ${count} flaws processed.`);
         })
     } else {
         await processPolicyFlaws(options, flawData)
         .then (count => {
             console.log(`Done.  ${count} flaws processed.`);
+            const internal_flaw_count = count
         })
     }
 }
+
 
 module.exports = { importFlaws };

@@ -5,8 +5,6 @@
 
 # helper test output
 helpers/flaws*
-.DS_Store
 Archive.zip
 package-lock.json
-.DS_Store
 .DS_Store
