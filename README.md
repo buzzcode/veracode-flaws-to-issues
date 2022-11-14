@@ -95,7 +95,6 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
         uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: 'filtered_results.json'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Policy/Sandbox scan
@@ -146,5 +145,4 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
         uses: veracode/veracode-flaws-to-issues@v2.1.0
         with:
           scan-results-json: '/tmp/policy_flaws.json'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
