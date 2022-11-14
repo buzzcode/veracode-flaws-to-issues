@@ -22,6 +22,7 @@ async function importFlaws(options) {
     const source_base_path_3 = options.source_base_path_3;
     const commit_hash = options.commit_hash;
     const fail_build = options.fail_build;
+    const internal_flaw_count = 0
     var flawData;
 
     // basic sanity checking
@@ -66,14 +67,14 @@ async function importFlaws(options) {
     if(scanType == 'pipeline') {
         await processPipelineFlaws(options, flawData)
         .then (count => {
-            const internal_flaw_count = count
+            internal_flaw_count = count
             console.log(`Done.  ${count} flaws processed.`);
         })
     } else {
         await processPolicyFlaws(options, flawData)
         .then (count => {
             console.log(`Done.  ${count} flaws processed.`);
-            const internal_flaw_count = count
+            internal_flaw_count = count
         })
     }
 
