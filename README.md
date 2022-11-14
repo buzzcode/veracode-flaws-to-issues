@@ -73,7 +73,7 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
           with:
             name: verademo.war
         - name: pipeline-scan action step
-          id: pipelien-scan
+          id: pipeline-scan
           uses: veracode/Veracode-pipeline-scan-action@pipeline-scan-beta-v0.0.4
           with:
             vid: ${{ secrets.VID }}
