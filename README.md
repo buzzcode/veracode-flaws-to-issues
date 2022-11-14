@@ -48,7 +48,7 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
   
 ### `fail_build`
    
-**Optional** If a previous task run and was set to `fail_build: false` as you need to run this `flaws-to-issues` action after the scan is finsihed but you still need to fail the pipeline based on findings from a Veracode scan, this option is require to be set to `true`.
+**Optional** If a previous task run and was set to `fail_build: false` as you need to run this `flaws-to-issues` action after the scan is finished but you still need to fail the pipeline based on findings from a Veracode scan, this option is require to be set to `true`.
 | Default value | `""` |
 --- | ---   
   
