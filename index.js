@@ -51,7 +51,8 @@ try {
          source_base_path_3: source_base_path_3,
          commit_hash: commit_hash,
          isPR: isPR,
-         pr_commentID: pr_commentID
+         pr_commentID: pr_commentID,
+         fail_build: fail_build
         }
     )
 
