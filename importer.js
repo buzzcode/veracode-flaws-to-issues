@@ -21,6 +21,7 @@ async function importFlaws(options) {
     const source_base_path_2 = options.source_base_path_2; 
     const source_base_path_3 = options.source_base_path_3;
     const commit_hash = options.commit_hash;
+    const fail_build = options.fail_build;
     var flawData;
 
     // basic sanity checking
