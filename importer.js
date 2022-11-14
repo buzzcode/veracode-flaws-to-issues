@@ -3,7 +3,7 @@
 // 
 
 const fs = require('fs');
-const core = require('@actions/core');
+//const core = require('@actions/core');
 const processPipelineFlaws = require('./pipeline').processPipelineFlaws;
 const processPolicyFlaws = require('./policy').processPolicyFlaws;
 const label = require('./label');
@@ -82,7 +82,7 @@ async function importFlaws(options) {
     // add break build functionality
     if ( fail_build == "true" ){
         if ( internal_flaw_count > 0 ){
-            core.info('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
+            console.log('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
             core.setFailed('There are Veracode flaws found that require the build to fail, please review generated GitHub issues')
         }
     }
