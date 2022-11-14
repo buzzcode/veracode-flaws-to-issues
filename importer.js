@@ -3,6 +3,7 @@
 // 
 
 const fs = require('fs');
+const core = require('@actions/core');
 const processPipelineFlaws = require('./pipeline').processPipelineFlaws;
 const processPolicyFlaws = require('./policy').processPolicyFlaws;
 const label = require('./label');
