@@ -28,6 +28,7 @@ try {
     let pullRequest = process.env.GITHUB_REF
     core.info(pullRequest)
     console.log(pullRequest)
+    console.log(process.env)
 
     if ( debug == true ){
         core.info('#### DEBUG START ####')
