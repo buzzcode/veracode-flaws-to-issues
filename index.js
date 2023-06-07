@@ -29,6 +29,7 @@ try {
 
     if ( debug == true ){
         core.info('#### DEBUG START ####')
+        core.info('index.js')
         core.info(pullRequest)
         core.info(process.env)
         core.info('#### DEBUG END ####')
@@ -46,6 +47,7 @@ try {
    else {
     if ( debug == true ){
         core.info('#### DEBUG START ####')
+        core.info('index.js')
         core.info("isPR?: "+ isPR)
         core.info('#### DEBUG END ####')
     }

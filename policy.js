@@ -232,11 +232,11 @@ async function processPolicyFlaws(options, flawData) {
 
         if ( options.debug == true ){
             core.info('#### DEBUG START ####')
+            core.info("policy.js")
             console.log('isPr?: '+options.isPR)
             core.info('#### DEBUG END ####')
         }
 
-        console.log('isPr?: '+options.isPR)
 
         if ( options.isPR >= 1 ){
             pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
@@ -244,10 +244,10 @@ async function processPolicyFlaws(options, flawData) {
 
         if ( options.debug == true ){
             core.info('#### DEBUG START ####')
+            core.info('policy,js')
             console.log('pr_link: '+pr_link)
             core.info('#### DEBUG END ####')
         }
-        console.log('pr_link: '+pr_link)
 
         let bodyText = `${commit_path}`;
         bodyText += `\n\n**Filename:** ${flaw.finding_details.file_name}`;
