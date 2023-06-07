@@ -26,10 +26,13 @@ try {
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
+    core.info(pullRequest)
+    console.log(pullRequest)
+
     if ( debug == true ){
         core.info('#### DEBUG START ####')
-        core.info(pullRequest)
-        core.info(process.env)
+        console.log(pullRequest)
+        console.log(process.env)
         core.info('#### DEBUG END ####')
     }
     const isPR = pullRequest.indexOf("pull")
