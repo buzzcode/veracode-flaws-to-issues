@@ -43,6 +43,14 @@ try {
         pr_context = github.context
         pr_commentID = pr_context.payload.pull_request.number
    }
+   else {
+    if ( debug == true ){
+        core.info('#### DEBUG START ####')
+        core.info("isPR?: "+ isPR)
+        core.info('#### DEBUG END ####')
+    }
+    core.info("We don't run on a PR")
+   }
 
 
     // do the thing
