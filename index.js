@@ -29,6 +29,7 @@ try {
     if ( debug == true ){
         core.info('#### DEBUG START ####')
         core.info(pullRequest)
+        core.info(process.env)
         core.info('#### DEBUG END ####')
     }
     const isPR = pullRequest.indexOf("pull")
