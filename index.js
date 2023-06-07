@@ -16,8 +16,9 @@ try {
     const source_base_path_2 = core.getInput('source_base_path_2'); 
     const source_base_path_3 = core.getInput('source_base_path_3');
     const fail_build = core.getInput('fail_build');
+    const debug = core.getInput('debug')
     const commit_hash = process.env.GITHUB_SHA;
-    console.log('resultsFiel: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash)
+    console.log('resultsFile: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash)
 
     // other params
     const owner = github.context.repo.owner;
@@ -25,6 +26,11 @@ try {
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
+    if ( debug == true ){
+        core.info('#### DEBUG START ####')
+        core.info(pullRequest)
+        core.info('#### DEBUG END ####')
+    }
     const isPR = pullRequest.indexOf("pull")
 
     console.log('We run on a PR and PR ID is '+isPR)
