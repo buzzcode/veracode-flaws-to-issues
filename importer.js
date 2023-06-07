@@ -72,6 +72,9 @@ async function importFlaws(options) {
             console.log(`Done.  ${count} flaws processed.`);
         })
     } else {
+        if ( options.debug == true ){
+            console.log("isPr?: "+options.isPR)
+        }
         await processPolicyFlaws(options, flawData)
         .then (count => {
             console.log(`Done.  ${count} flaws processed.`);

@@ -26,19 +26,14 @@ try {
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
-    core.info(pullRequest)
-    console.log(pullRequest)
-    console.log(process.env)
 
     if ( debug == true ){
         core.info('#### DEBUG START ####')
-        console.log(pullRequest)
-        console.log(process.env)
+        core.info(pullRequest)
+        core.info(process.env)
         core.info('#### DEBUG END ####')
     }
     const isPR = pullRequest.indexOf("pull")
-
-    console.log('We run on a PR and PR ID is '+isPR)
 
     var pr_context
     var pr_commentID
@@ -63,7 +58,8 @@ try {
          commit_hash: commit_hash,
          isPR: isPR,
          pr_commentID: pr_commentID,
-         fail_build: fail_build
+         fail_build: fail_build,
+         debug: debug
         }
     )
 
