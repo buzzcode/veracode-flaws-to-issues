@@ -31,7 +31,7 @@ try {
         core.info('#### DEBUG START ####')
         core.info('index.js')
         core.info(pullRequest)
-        core.info(process.env)
+        core.info(JSON.stringify(process.env))
         core.info('#### DEBUG END ####')
     }
     const isPR = pullRequest.indexOf("pull")
