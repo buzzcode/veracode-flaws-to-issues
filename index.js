@@ -39,7 +39,7 @@ try {
     var pr_context
     var pr_commentID
 
-    core.info("Debug enabled?: "+ debug)
+    core.info("Debug enabled?: "+ debug))
 
 
    if ( isPR >= 1 ){
@@ -48,7 +48,7 @@ try {
         pr_commentID = pr_context.payload.pull_request.number
    }
    else {
-    if ( debug == true ){
+    if ( debug == "true" ){
         core.info('#### DEBUG START ####')
         core.info('index.js')
         core.info("isPR?: "+ isPR)
