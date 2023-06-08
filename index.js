@@ -39,6 +39,9 @@ try {
     var pr_context
     var pr_commentID
 
+    core.info("Debug enabled?: "+ debug)
+
+
    if ( isPR >= 1 ){
         core.info("This run is part of a PR, should add some PR links")
         pr_context = github.context
