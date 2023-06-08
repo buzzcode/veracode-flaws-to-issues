@@ -39,7 +39,7 @@ try {
     var pr_context
     var pr_commentID
 
-    core.info("Debug enabled?: "+ debug))
+    core.info("Debug enabled?: "+ debug)
 
 
    if ( isPR >= 1 ){
