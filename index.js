@@ -27,7 +27,7 @@ try {
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
 
-    if ( debug == true ){
+    if ( debug == "true" ){
         core.info('#### DEBUG START ####')
         core.info('index.js')
         core.info(pullRequest)
@@ -38,8 +38,6 @@ try {
 
     var pr_context
     var pr_commentID
-
-    core.info("Debug enabled?: "+ debug)
 
 
    if ( isPR >= 1 ){

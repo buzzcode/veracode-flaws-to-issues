@@ -74,7 +74,7 @@ async function importFlaws(options) {
             console.log(`Done.  ${count} flaws processed.`);
         })
     } else {
-        if ( debug == true ){
+        if ( debug == "true" ){
             core.info('#### DEBUG START ####')
             core.info('importer.js')
             console.log("isPr?: "+isPR)

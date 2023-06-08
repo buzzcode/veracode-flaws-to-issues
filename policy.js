@@ -154,6 +154,12 @@ async function processPolicyFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
+            if ( debug == "true" ){
+                core.info('#### DEBUG START ####')
+                core.info('policy.js')
+                console.log("isPr?: "+isPR)
+                core.info('#### DEBUG END ####')
+            }
             if ( options.isPR >= 1 && issueState == "open" ){
                 console.log('We are on a PR, need to link this issue to this PR')
                 pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
@@ -230,7 +236,7 @@ async function processPolicyFlaws(options, flawData) {
         let lableBase = label.otherLabels.find( val => val.id === 'policy').name;
         let severity = flaw.finding_details.severity;
 
-        if ( options.debug == true ){
+        if ( options.debug == "true" ){
             core.info('#### DEBUG START ####')
             core.info("policy.js")
             console.log('isPr?: '+options.isPR)
@@ -240,13 +246,6 @@ async function processPolicyFlaws(options, flawData) {
 
         if ( options.isPR >= 1 ){
             pr_link = `Veracode issue link to PR: https://github.com/`+options.githubOwner+`/`+options.githubRepo+`/pull/`+options.pr_commentID
-        }
-
-        if ( options.debug == true ){
-            core.info('#### DEBUG START ####')
-            core.info('policy,js')
-            console.log('pr_link: '+pr_link)
-            core.info('#### DEBUG END ####')
         }
 
         let bodyText = `${commit_path}`;
