@@ -154,7 +154,7 @@ async function processPolicyFlaws(options, flawData) {
         // check for duplicate
         if(issueExists(vid)) {
             console.log('Issue already exists, skipping import');
-            if ( debug == "true" ){
+            if ( options.debug == "true" ){
                 core.info('#### DEBUG START ####')
                 core.info('policy.js')
                 console.log("isPr?: "+isPR)
