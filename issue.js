@@ -3,6 +3,7 @@
 //
 
 const { request } = require('@octokit/request');
+const core = require('@actions/core');
 
 // add the flaw to GitHub as an Issue
 async function addVeracodeIssue(options, issue) {
@@ -34,7 +35,7 @@ async function addVeracodeIssue(options, issue) {
     .then( async result => {
         console.log(`Issue successfully created, result: ${result.status}`);
         var issue_number = result.data.number
-        if ( debug == "true" ){
+        if ( options.debug == "true" ){
             core.info('#### DEBUG START ####')
             core.info('issues.js')
             console.log("isPr?: "+options.isPR)
