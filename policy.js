@@ -157,7 +157,7 @@ async function processPolicyFlaws(options, flawData) {
             if ( options.debug == "true" ){
                 core.info('#### DEBUG START ####')
                 core.info('policy.js')
-                console.log("isPr?: "+isPR)
+                console.log("isPr?: "+options.isPR)
                 core.info('#### DEBUG END ####')
             }
             if ( options.isPR >= 1 && issueState == "open" ){
