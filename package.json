@@ -1,6 +1,6 @@
 {
-  "name": "pipeline-to-issues",
-  "version": "1.0.0",
+  "name": "veracode-flaws-to-issues",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,18 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/buzzcode/pipeline-to-issues.git"
+    "url": "git+https://github.com/veracode/veracode-flaws-to-issues.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/buzzcode/pipeline-to-issues/issues"
+    "url": "https://github.com/veracode/veracode-flaws-to-issues/issues"
   },
-  "homepage": "https://github.com/buzzcode/pipeline-to-issues#readme",
+  "homepage": "https://github.com/veracode/veracode-flaws-to-issues#readme",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
+    "@octokit/auth-action": "^4.0.0",
     "@octokit/request": "^5.4.14",
     "commander": "^7.1.0",
     "dotenv": "^8.2.0",
