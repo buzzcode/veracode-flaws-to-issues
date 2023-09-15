@@ -69,7 +69,7 @@ async function createLabels(options) {
     // create label, accept error code if it already exists
     console.log('Creating VeracodeFlaw labels');
 
-    var authToken = 'token ' + githubToken;
+    var authToken = 'Bearer ' + githubToken;
 
     for(const element of flawLabels.concat(otherLabels) ) {
         await request('POST /repos/{owner}/{repo}/labels', {

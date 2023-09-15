@@ -51,8 +51,53 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
 **Optional** If a previous task run and was set to `fail_build: false` as you need to run this `flaws-to-issues` action after the scan is finished but you still need to fail the pipeline based on findings from a Veracode scan, this option is require to be set to `true`.
 | Default value | `""` |
 --- | ---   
-  
-  
+
+---
+
+## Permissions
+
+If you get an error like:
+
+```
+Failure at Error: Error 404 creating VeracodeFlaw label "VeracodeFlaw: Very High": Not Found
+```
+Or:
+```
+Failure at Error: Error 403 creating VeracodeFlaw label "VeracodeFlaw: Very High": Resource not accessible by integration
+```
+
+It is likely that something is wrong with the permissions for the token provided to the action (GitHub API responds with 403 or 404 if there are permission issues).
+
+### GITHUB_TOKEN
+
+This action requires `issues: write` of all (new) Personal Access Tokens, including the automatically generated `GITHUB_TOKEN`.
+
+If you do not add anything to the YAML, by default the `GITHUB_TOKEN` will be used and it will not be given "write" rights to "issues".
+
+You can [change the default permissions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#setting-the-permissions-of-the-github_token-for-your-repository), but this would apply to all workflows in your repository and we generally don't recommend this
+
+To follow the Principle of Least Privilege we recommend only granting the permission to the job in the job configuration by including [job.<job_id>.permissions](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idpermissions):
+
+```
+    permissions:
+      issues: write
+```
+
+
+### Your own token
+
+You can specify your own token with the `github-token` argument:
+```
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+```
+
+If this is a Classic token this token must have the `repo` scope.
+[You can check this with curl](https://stackoverflow.com/a/70588035).
+
+If this is a new 'fine-grained, repository-scoped token' you will need to ensure that for the given repository it says "Read and Write access to issues".
+[You can check that here](https://github.com/settings/tokens?type=beta)
+
 ## Example usage
 
 ### Pipeline Scan
@@ -85,6 +130,8 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
   import-issues:
     needs: scan
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: get scan results
         uses: actions/download-artifact@v3
@@ -134,6 +181,8 @@ source-base-path-2: "^WEB-INF:src/main/webapp/WEB-INF"
   import-policy-flaws:
     needs: get-policy-flaws
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: get flaw file
         uses: actions/download-artifact@v3
