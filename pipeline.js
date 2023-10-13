@@ -285,13 +285,12 @@ async function processPipelineFlaws(options, flawData) {
 
         let issue = {
             'flaw': {
-                'id': flaw.issue_id,
                 'cwe': {
-                    'id': flaw.finding_details.cwe.id,
-                    'name': flaw.finding_details.cwe.name
+                    'id': flaw.cwe_id,
+                    'name': flaw.issue_type
                 },
-                'lineNumber': flaw.finding_details.file_line_number,
-                'file': flaw.finding_details.file_name
+                'lineNumber': flaw.files.source_file.line,
+                'file': flaw.files.source_file.file
             },
             'title': title,
             'label': lableBase,
