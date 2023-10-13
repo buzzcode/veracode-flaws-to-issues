@@ -41,6 +41,22 @@ async function addVeracodeIssue(options, issue) {
             console.log("isPr?: "+options.isPR)
             core.info('#### DEBUG END ####')
         }
+        const mailToLink = buildMailToLink(
+            `https://github.com/${githubOwner}/${githubRepo}/issues/${issueNumber}`,
+            issue.flaw
+        );
+        await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+            headers: {
+                authorization: authToken
+            },
+            owner: githubOwner,
+            repo: githubRepo,
+            issue_number: issue_number,
+            data: {
+                "body": `Don't know how to fix this? Don't know why this was reported?<br>
+                <a href="${mailToLink}">Get Assistance from Veracode</a>`
+            }
+        });
         if ( issue.pr_link != "" && options.isPR >=1 ){
             console.log('Running on a PR, adding PR to the issue.')
             //console.log('pr_link: '+issue.pr_link+'\nissue_number: '+issue_number)
@@ -70,6 +86,25 @@ async function addVeracodeIssue(options, issue) {
             throw new Error (`Error ${error.status} creating Issue for \"${issue.title}\": ${error.message}`);
         }           
     });
+}
+
+function buildMailToLink(issueUrl, flaw) {
+    return encodeURIComponent(
+        'mailto:support@veracode.com?subject=' +
+        encodeURIComponent('[veracode/veracode-flaws-to-issues] Get Assistance') +
+        '&body=' +
+        encodeURIComponent(`Hi,
+
+Could you please help me with: ${issueUrl}.
+A CWE-${flaw.cwe.id}: ${flaw.cwe.name} flaw reported on line ${flaw.lineNumber} of ${flaw.file} .
+
+I'd like help with:
+[ ] Understanding why this flaw was reported
+[ ] Fixing this flaw
+[ ] Other, namely: [[ please describe here ]]
+
+Thank you.`)
+    );
 }
 
 module.exports = { addVeracodeIssue };

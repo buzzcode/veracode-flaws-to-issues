@@ -258,6 +258,14 @@ async function processPolicyFlaws(options, flawData) {
         //console.log('bodyText: '+bodyText)
 
         let issue = {
+            'flaw': {
+                'cwe': {
+                    'id': flaw.finding_details.cwe.id,
+                    'name': flaw.finding_details.cwe.name
+                },
+                'lineNumber': flaw.finding_details.file_line_number,
+                'file': flaw.finding_details.file_name
+            },
             'title': title,
             'label': lableBase,
             'severity': severity,
