@@ -89,8 +89,7 @@ async function addVeracodeIssue(options, issue) {
 }
 
 function buildMailToLink(issueUrl, flaw) {
-    return encodeURIComponent(
-        'mailto:support@veracode.com?subject=' +
+    return 'mailto:support@veracode.com?subject=' +
         encodeURIComponent('[veracode/veracode-flaws-to-issues] Get Assistance') +
         '&body=' +
         encodeURIComponent(`Hi,
@@ -103,8 +102,7 @@ I'd like help with:
 [ ] Fixing this flaw
 [ ] Other, namely: [[ please describe here ]]
 
-Thank you.`)
-    );
+Thank you.`);
 }
 
 module.exports = { addVeracodeIssue };
