@@ -42,7 +42,7 @@ async function addVeracodeIssue(options, issue) {
             core.info('#### DEBUG END ####')
         }
         const mailToLink = buildMailToLink(
-            `https://github.com/${githubOwner}/${githubRepo}/issues/${issueNumber}`,
+            `https://github.com/${githubOwner}/${githubRepo}/issues/${issue_number}`,
             issue.flaw
         );
         await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
