@@ -284,6 +284,14 @@ async function processPipelineFlaws(options, flawData) {
         bodyText += '\n\n' + decodeURI(flaw.display_text);
 
         let issue = {
+            'flaw': {
+                'cwe': {
+                    'id': flaw.cwe_id,
+                    'name': flaw.issue_type
+                },
+                'lineNumber': flaw.files.source_file.line,
+                'file': flaw.files.source_file.file
+            },
             'title': title,
             'label': lableBase,
             'severity': severity,
