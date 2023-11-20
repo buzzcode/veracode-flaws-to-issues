@@ -31,7 +31,7 @@ jobs:
       - name: create new package-lock.json
         run: npm install
       - name: ZIP source folder
-        run: zip -r app.zip src package-lock.json
+        run: zip -r app.zip *.js package-lock.json -x node_modules -x doc -x test -x helpers -x .vscode
       - name: Run Veracode Policy scan
         uses: veracode/veracode-uploadandscan-action@0.2.6
         with:
