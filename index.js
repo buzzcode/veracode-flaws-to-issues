@@ -26,7 +26,9 @@ try {
     // other params
     if ( core.getInput('repo_owner') && core.getInput('repo_name') ){
         const owner = core.getInput('repo_owner');
+        console.log('Owner: '+core.getInput('repo_owner'))
         const repo = core.getInput('repo_name');
+        console.log('Repo: '+core.getInput('repo_name'))
     }
     else {
         const owner = github.context.repo.owner;
