@@ -32,31 +32,31 @@ async function addVeracodeIssue(options, issue) {
             "body": issue.body
         }
     })
-    .then( async result => {
+//    .then( async result => {
         console.log(`Issue successfully created, result: ${result.status}`);
-        var issue_number = result.data.number
-        if ( options.debug == "true" ){
-            core.info('#### DEBUG START ####')
-            core.info('issues.js')
-            console.log("isPr?: "+options.isPR)
-            core.info('#### DEBUG END ####')
-        }
-        const mailToLink = buildMailToLink(
-            `https://github.com/${githubOwner}/${githubRepo}/issues/${issue_number}`,
-            issue.flaw
-        );
-        await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
-            headers: {
-                authorization: authToken
-            },
-            owner: githubOwner,
-            repo: githubRepo,
-            issue_number: issue_number,
-            data: {
-                "body": `Don't know how to fix this? Don't know why this was reported?<br>
-                <a href="${mailToLink}">Get Assistance from Veracode</a>`
-            }
-        });
+//        var issue_number = result.data.number
+//        if ( options.debug == "true" ){
+//            core.info('#### DEBUG START ####')
+//            core.info('issues.js')
+//            console.log("isPr?: "+options.isPR)
+//            core.info('#### DEBUG END ####')
+//        }
+//        const mailToLink = buildMailToLink(
+//            `https://github.com/${githubOwner}/${githubRepo}/issues/${issue_number}`,
+//            issue.flaw
+//        );
+//        await request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
+//            headers: {
+//                authorization: authToken
+//            },
+//            owner: githubOwner,
+//            repo: githubRepo,
+//            issue_number: issue_number,
+//            data: {
+//                "body": `Don't know how to fix this? Don't know why this was reported?<br>
+//                <a href="${mailToLink}">Get Assistance from Veracode</a>`
+//            }
+//        });
         if ( issue.pr_link != "" && options.isPR >=1 ){
             console.log('Running on a PR, adding PR to the issue.')
             //console.log('pr_link: '+issue.pr_link+'\nissue_number: '+issue_number)
