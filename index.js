@@ -39,21 +39,25 @@ try {
     console.log('owner = '+owner);
     console.log('repo = '+repo);
 
-
-    core.info('check if we run on a pull request')
-    let pullRequest = process.env.GITHUB_REF
-
-    if ( debug == "true" ){
-        core.info('#### DEBUG START ####')
-        core.info('index.js')
-        core.info(pullRequest)
-        core.info(JSON.stringify(process.env))
-        core.info('#### DEBUG END ####')
+    if ( core.getInput('repo_owner') && core.getInput('repo_name') ){
+        isPR = 0
     }
-    const isPR = pullRequest.indexOf("pull")
+    else {
+        core.info('check if we run on a pull request')
+        let pullRequest = process.env.GITHUB_REF
 
-    var pr_context
-    var pr_commentID
+        if ( debug == "true" ){
+            core.info('#### DEBUG START ####')
+            core.info('index.js')
+            core.info(pullRequest)
+            core.info(JSON.stringify(process.env))
+            core.info('#### DEBUG END ####')
+        }
+        const isPR = pullRequest.indexOf("pull")
+
+        var pr_context
+        var pr_commentID
+    }
 
 
    if ( isPR >= 1 ){
