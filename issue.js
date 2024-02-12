@@ -32,7 +32,7 @@ async function addVeracodeIssue(options, issue) {
             "body": issue.body
         }
     })
-//    .then( async result => {
+    .then( async result => {
         console.log(`Issue successfully created, result: ${result.status}`);
 //        var issue_number = result.data.number
 //        if ( options.debug == "true" ){
