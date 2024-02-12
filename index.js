@@ -21,8 +21,7 @@ try {
     console.log('resultsFile: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash+'\ndebug: '+debug)
 
 
-    console.log('owner = '+github.context.repo.owner);
-    console.log('repo = '+github.context.repo.repo);
+    
 
     // other params
     if ( core.getInput('repo_owner') && core.getInput('repo_name') ){
@@ -33,6 +32,10 @@ try {
         const owner = github.context.repo.owner;
         const repo = github.context.repo.repo;
     }
+
+    console.log('owner = '+owner);
+    console.log('repo = '+repo);
+
 
     core.info('check if we run on a pull request')
     let pullRequest = process.env.GITHUB_REF
