@@ -29,7 +29,7 @@ async function addVeracodeIssue(options, issue) {
         data: {
             "title": issue.title,
             "labels": [label.severityToLabel(issue.severity), issue.label],
-            "body": issue.body
+            "body": issue.body+`/nDon't know how to fix this? Don't know why this was reported?<br><a href="${mailToLink}">Get Assistance from Veracode</a>`
         }
     })
     .then( async result => {
