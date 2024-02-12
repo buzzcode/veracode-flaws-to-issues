@@ -34,13 +34,13 @@ async function addVeracodeIssue(options, issue) {
     })
     .then( async result => {
         console.log(`Issue successfully created, result: ${result.status}`);
-//        var issue_number = result.data.number
-//        if ( options.debug == "true" ){
-//            core.info('#### DEBUG START ####')
-//            core.info('issues.js')
-//            console.log("isPr?: "+options.isPR)
-//            core.info('#### DEBUG END ####')
-//        }
+        var issue_number = result.data.number
+        if ( options.debug == "true" ){
+            core.info('#### DEBUG START ####')
+            core.info('issues.js')
+            console.log("isPr?: "+options.isPR)
+            core.info('#### DEBUG END ####')
+        }
 //        const mailToLink = buildMailToLink(
 //            `https://github.com/${githubOwner}/${githubRepo}/issues/${issue_number}`,
 //            issue.flaw
