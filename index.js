@@ -20,6 +20,10 @@ try {
     const commit_hash = process.env.GITHUB_SHA;
     console.log('resultsFile: '+resultsFile+'\nwaitTime: '+waitTime+'\nsource_base_path_1: '+source_base_path_1+'\nsource_base_path_2: '+source_base_path_2+'\nsource_base_path_3: '+source_base_path_3+'\ncommit_hash: '+commit_hash+'\ndebug: '+debug)
 
+
+    console.log('owner = '+github.context.repo.owner);
+    console.log('repo = '+github.context.repo.repo);
+
     // other params
     if ( core.getInput('repo_owner') && core.getInput('repo_name') ){
         const owner = core.getInput('repo_owner');
